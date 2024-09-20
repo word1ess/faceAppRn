@@ -15,6 +15,7 @@ import ScreenSeventh from "./Components/ScreenSeventh";
 import ScreenEighth from "./Components//ScreenEighth";
 
 import store from "./redux/store";
+import ScreenNinth from "./Components/ScreenNinth";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -52,7 +53,7 @@ function Tabs() {
     >
       <Tab.Screen name="Рейтинг" component={ScreenSeventh} />
       <Tab.Screen name="Анализ" component={ScreenEighth} />
-      <Tab.Screen name="Топ" component={ScreenEighth} />
+      <Tab.Screen name="Топ" component={ScreenNinth} />
     </Tab.Navigator>
   );
 }

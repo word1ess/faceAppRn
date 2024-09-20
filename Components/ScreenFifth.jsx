@@ -23,7 +23,7 @@ export default function ScreenFifth() {
     });
     if (!result.canceled) {
       dispatch(setImageProfile(result.assets[0].uri));
-      navigation.navigate("screen-7");
+      navigation.navigate("tabs");
     }
   };
 

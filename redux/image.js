@@ -4,7 +4,6 @@ import { photoApi } from "../api/api";
 const initialState = {
   frontal: {
     toUser: "",
-    toServer: "",
   },
   profile: "",
 };
@@ -14,10 +13,7 @@ export const imageSlice = createSlice({
   initialState,
   reducers: {
     setImageFrontal: (state, action) => {
-      Object.keys(state.frontal).forEach(function (photo, i, arr) {
-        state.frontal[photo] = action.payload[i];
-      });
-      let stat = photoApi.postImageApi("1", state.frontal.toServer);
+      state.frontal.toUser = action.payload;
     },
     setImageProfile: (state, action) => {
       state.profile = action.payload;

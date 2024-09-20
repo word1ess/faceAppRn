@@ -1,12 +1,28 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import Svg, { Path } from "react-native-svg";
 import CustomText from "./Сommon/CustomText.jsx";
 import CustomBtn from "./Сommon/CustomBtn.jsx";
+
 import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
+import { setUserSession } from "../redux/statistics.js";
+import { useDispatch } from "react-redux";
+import Svg, { Path } from "react-native-svg";
+
+import * as Linking from "expo-linking";
 
 export default function Index() {
+  let url = Linking.useURL();
+
+  let regex = /[?&]([^=#]+)=([^&#]*)/g,
+    params = {},
+    match;
+  while ((match = regex.exec(url))) {
+    params[match[1]] = match[2];
+  }
+  const dispatch = useDispatch();
+  dispatch(setUserSession(params.session));
+
   return (
     <View
       style={{
@@ -24,8 +40,7 @@ export default function Index() {
             fill="#9F8FFF"
           />
         </Svg>
-
-        <CustomText text="Logo" fontSize={48} fontUpperCase />
+        <Text style={styles.headerText}>Logo</Text>
       </View>
       <Text>
         <CustomText text={"Сделайте селфи для анализа"} />{" "}
@@ -60,5 +75,6 @@ const styles = StyleSheet.create({
     fontSize: 48,
     textAlign: "center",
     color: "#fff",
+    textTransform: "uppercase",
   },
 });

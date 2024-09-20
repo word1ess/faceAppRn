@@ -169,10 +169,10 @@ export default function ScreenEighth() {
               <View key={i} style={styles.contentStatisticsItem}>
                 <Svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width={svgForItems[i].width}
-                  height={svgForItems[i].height}
+                  width={svgForItems[i]?.width}
+                  height={svgForItems[i]?.height}
                 >
-                  {svgForItems[i].path}
+                  {svgForItems[i]?.path}
                 </Svg>
                 <CustomText text={statistic.name} fontSize={18} />
                 <CustomText text={statistic.description} fontSize={12} />

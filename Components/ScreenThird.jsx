@@ -7,27 +7,56 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
+
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
 import Svg, { Path } from "react-native-svg";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 import { setImageFrontal } from "../redux/image.js";
+import { photoApi } from "../api/api.js";
+import { setStatistics } from "../redux/statistics.js";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function ScreenThird() {
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const session = useSelector((state) => state.statistics.userSession);
+
   const colorsGradient = ["#c78fff", "#3d73eb"];
   let cameraRef;
 
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
-    const photo = await cameraRef.takePictureAsync();
-    dispatch(setImageFrontal(photo.uri));
+    let photo = await cameraRef.takePictureAsync({ quality: 0.8 });
+    const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
+      { resize: { width: 800, height: 600 } },
+    ]);
+    let localUri = resizedPhoto.uri;
+    let filename = localUri.split("/").pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    let formData = new FormData();
+    formData.append("image_files", { uri: localUri, type, name: filename });
+
+    dispatch(setImageFrontal(localUri));
     navigation.navigate("screen-4");
+
+    try {
+      const response = await photoApi.postImageApi(session, formData, filename);
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(setStatistics(data.items));
+      }
+      if (!response.ok) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
 
   if (!permission) {
@@ -39,6 +68,10 @@ export default function ScreenThird() {
         style={{
           flex: 1,
           backgroundColor: "#16202c",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          gap: 20,
           alignItems: "center",
           padding: 20,
         }}
@@ -81,7 +114,7 @@ export default function ScreenThird() {
               fill="#9F8FFF"
             />
           </Svg>
-          <CustomText text="Назад" fontSize={14} />
+          <Text style={styles.btnBackText}>Назад</Text>
         </Pressable>
         <TouchableOpacity onPress={takePhotoHandle} style={styles.btnTakePhoto}>
           <LinearGradient
@@ -118,6 +151,10 @@ const styles = StyleSheet.create({
     top: 20,
     left: 0,
   },
+  btnBackText: {
+    fontSize: 14,
+    color: "#fff",
+  },
   btnTakePhoto: {
     width: 77,
     height: 77,
@@ -133,5 +170,35 @@ const styles = StyleSheet.create({
   btnTakePhotoInner: {
     width: 60,
     height: 60,
+  },
+  btnGradient: {
+    width: "100%",
+    borderRadius: 60,
+    gap: 8,
+    padding: 20,
+    marginTop: 18,
+  },
+  btnText: {
+    fontSize: 20,
+    textAlign: "center",
+    color: "#fff",
+  },
+  btnBorderedStyle: {
+    width: "100%",
+    borderRadius: 60,
+    padding: 2,
+    marginTop: 18,
+  },
+  btnBorderStyle: {
+    gap: 8,
+    padding: 20,
+    borderRadius: 60,
+    color: "#9f8fff",
+    backgroundColor: "#16202c",
+  },
+  textBtnBorderedStyle: {
+    fontSize: 20,
+    textAlign: "center",
+    color: "#9f8fff",
   },
 });
