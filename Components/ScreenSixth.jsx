@@ -26,9 +26,12 @@ export default function ScreenSixth() {
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
 
-    const photo = await cameraRef.takePictureAsync();
-    dispatch(setImageProfile(photo.uri));
-    navigation.navigate("screen-4");
+    let photo = await cameraRef.takePictureAsync({ quality: 0.8 });
+    const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
+      { resize: { width: 600, height: 800 } },
+    ]);
+    dispatch(setImageProfile(resizedPhoto.uri));
+    navigation.navigate("tabs");
   };
 
   if (!permission) {

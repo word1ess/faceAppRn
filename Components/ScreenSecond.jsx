@@ -1,14 +1,13 @@
 import CustomText from "./Сommon/CustomText.jsx";
 import * as ImagePicker from "expo-image-picker";
 import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
+import * as FileSystem from "expo-file-system";
 
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View, Pressable, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageFrontal } from "../redux/image.js";
-import { photoApi } from "../api/api.js";
-import { setStatistics } from "../redux/statistics.js";
 import { useCameraPermissions } from "expo-camera";
 
 export default function ScreenSecond() {
@@ -24,40 +23,45 @@ export default function ScreenSecond() {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.7,
+      quality: 0.5,
     });
     if (!result.canceled) {
-      let localUri = result.assets[0].uri;
-      let filename = localUri.split("/").pop();
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
-      let formData = new FormData();
-      formData.append("image_files", { uri: localUri, type, name: filename });
+      // let localUri = result.assets[0].uri;
+      // let filename = localUri.split("/").pop();
+      // let match = /\.(\w+)$/.exec(filename);
+      // let type = match ? `image/${match[1]}` : `image`;
 
-      dispatch(setImageFrontal(localUri));
+      // const formData = new FormData();
+      // formData.append("image_files", { uri: localUri, type, name: filename });
+
+      dispatch(setImageFrontal(result.assets[0].uri));
       navigation.navigate("screen-4");
 
-      try {
-        const response = await photoApi.postImageApi(
-          session,
-          formData,
-          filename
-        );
-        if (response.ok) {
-          const data = await response.json();
-          dispatch(setStatistics(data.items));
-        }
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      }
+      // try {
+      //   const response = await photoApi.postImageApi(
+      //     session,
+      //     formData,
+      //     filename
+      //   );
+
+      //   console.log("Ответ сервера:", response); // Логируем ответ
+
+      //   if (response.ok) {
+      //     const data = await response.json();
+      //     dispatch(setStatistics(data.items));
+      //   } else {
+      //     // Обработка ошибки 422
+      //     console.error("Ошибка 422:", response.status, response.json());
+      //   }
+      // } catch (error) {
+      //   console.error("Error uploading image:", error);
+      // }
     }
   };
 
   const takePermission = () => {
     requestPermission(true);
-    if (!permission.granted) {
-      return;
-    }
+    if (!permission.granted) return;
     navigation.navigate("screen-3");
   };
 
@@ -124,3 +128,10 @@ const styles = StyleSheet.create({
     color: "#9f8fff",
   },
 });
+// Функция для преобразования URI в Base64
+// const convertImageToBase64 = async (uri) => {
+//   const base64Data = await FileSystem.readAsStringAsync(uri, {
+//     encoding: FileSystem.EncodingType.Base64,
+//   });
+//   return base64Data;
+// };

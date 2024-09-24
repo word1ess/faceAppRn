@@ -2,68 +2,48 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   items: [
-    // {
-    //   name: "1. Общий рейтинг",
-    //   description:
-    //     "Общее состояние лиц изображений гармонично, симметрично и выглядит естественно. Качество работы высокое с точки зрения пропорций и симметрии.",
-    //   score: 90,
-    // },
-    // {
-    //   name: "2. Подбородок",
-    //   description:
-    //     "У обоих изображений подбородок хорошо вписывается в общую форму лица, выглядит естественно и пропорционально.",
-    //   score: 85,
-    // },
-    // {
-    //   name: "3. Кожа",
-    //   description:
-    //     "Кожа на обеих изображениях выглядит гладкой, хорошо текстурированной и естественной по тону.",
-    //   score: 88,
-    // },
-    // {
-    //   name: "4. Волосы",
-    //   description:
-    //     "Волосы густые и текстурированные. Укладка выглядит естественно и гармонично. Цвет волос также натуральный.",
-    //   score: 82,
-    // },
-    // {
-    //   name: "5. Глаза",
-    //   description:
-    //     "Глаза у обоих изображений симметричны, естественны и хорошо вписываются в общую композицию лица.",
-    //   score: 90,
-    // },
-    // {
-    //   name: "6. Симметрия",
-    //   description:
-    //     "Лица на изображениях симметричны, что придает им гармоничный и естественный вид.",
-    //   score: 92,
-    // },
+    {
+      name: "1. Общий рейтинг",
+      score: 0,
+    },
+    {
+      name: "2. Подбородок",
+      score: 0,
+    },
+    {
+      name: "3. Кожа",
+      score: 0,
+    },
+    {
+      name: "4. Волосы",
+      score: 0,
+    },
+    {
+      name: "5. Глаза",
+      score: 0,
+    },
+    {
+      name: "6. Симметрия",
+      score: 0,
+    },
   ],
   info: [
-    // {
-    //   name: "7. Форма лица",
-    //   description:
-    //     "Форма лиц первого изображения можно охарактеризовать как Овал. Форма лица второго изображения ближе к Овальному типу.",
-    //   score: 0,
-    // },
-    // {
-    //   name: "8. Угол глаз",
-    //   description:
-    //     "Уголки глаз обоих изображений приподняты, что придает общий позитивный и энергичный вид.",
-    //   score: 0,
-    // },
-    // {
-    //   name: "9. Форма глаз",
-    //   description:
-    //     "Глаза на обоих изображениях миндалевидные, что придает им естественность и симметрию.",
-    //   score: 0,
-    // },
-    // {
-    //   name: "10. Тип глаз",
-    //   description:
-    //     "Тип глаз на первом изображении можно охарактеризовать как Европейский, а на втором - как Восточный.",
-    //   score: 0,
-    // },
+    {
+      name: "7. Форма лица",
+      score: 0,
+    },
+    {
+      name: "8. Угол глаз",
+      score: 0,
+    },
+    {
+      name: "9. Форма глаз",
+      score: 0,
+    },
+    {
+      name: "10. Тип глаз",
+      score: 0,
+    },
   ],
   userSession: "ahpbPzrKjf7NWBZ0ZV2eBlcW6d0QXbxIIJ+2GZW2/4U=",
   overallRating: 70,
@@ -77,17 +57,23 @@ export const statisticsSlice = createSlice({
   initialState,
   reducers: {
     setStatistics: (state, action) => {
-      for (const key in action.payload) {
-        const item = action.payload[key];
-        if (parseInt(key) < 6) {
-          state.items.push(item);
+      action.payload.forEach((item) => {
+        const index = state.items.findIndex((el) => el.name === item.name);
+
+        if (index !== -1) {
+          // Обновляем существующий элемент в массиве items
+          state.items.splice(index, 1, item);
+        } else {
+          // Обновляем существующий элемент в массиве info
+          const infoIndex = state.info.findIndex((el) => el.name === item.name);
+          if (infoIndex !== -1) {
+            state.info.splice(infoIndex, 1, item);
+          }
         }
-        if (5 < parseInt(key) < 11) {
-          state.info.push(item);
-        }
-      }
+      });
       state.overallRating = `${Math.round(calcOverallRating(state.items))}`;
     },
+
     setUserSession: (state, action) => {
       state.userSession = action.payload;
     },

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
 
 export default function ScreenNinth() {
-  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
+  const imageFrontal = useSelector((state) => state.image.frontal);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
   const rating = useSelector((state) => state.statistics.overallRating);
   const navigation = useNavigation();

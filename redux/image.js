@@ -2,9 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { photoApi } from "../api/api";
 
 const initialState = {
-  frontal: {
-    toUser: "",
-  },
+  frontal: "",
   profile: "",
 };
 
@@ -13,7 +11,7 @@ export const imageSlice = createSlice({
   initialState,
   reducers: {
     setImageFrontal: (state, action) => {
-      state.frontal.toUser = action.payload;
+      state.frontal = action.payload;
     },
     setImageProfile: (state, action) => {
       state.profile = action.payload;

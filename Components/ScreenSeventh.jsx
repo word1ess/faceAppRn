@@ -1,14 +1,51 @@
 import CircularProgress from "react-native-circular-progress-indicator";
 import CustomText from "./Сommon/CustomText.jsx";
+
+import { photoApi } from "../api/api.js";
+import { setStatistics } from "../redux/statistics.js";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, Text, StyleSheet, Pressable } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function ScreenSeventh() {
-  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
+  const imageFrontal = useSelector((state) => state.image.frontal);
+  const imageProfile = useSelector((state) => state.image.profile);
+  const session = useSelector((state) => state.statistics.session);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
   const statisticsAll = useSelector((state) => state.statistics.items);
+  const dispatch = useDispatch();
+
+  const getStatisticks = async () => {
+    const images = [imageFrontal, imageProfile];
+    const formData = new FormData();
+    const fileNames = [];
+    images.forEach((img) => {
+      let filename = img.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      fileNames.push(filename);
+      formData.append("image_files", { uri: img, type, name: filename });
+    });
+    try {
+      const response = await photoApi.postImageApi(
+        session,
+        formData,
+        fileNames
+      );
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(setStatistics(data.items));
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+  useEffect(() => {
+    getStatisticks();
+  }, []);
+
   const colors = [
     "#E8846E",
     "#3D73EB",

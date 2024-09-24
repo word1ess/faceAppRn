@@ -33,30 +33,11 @@ export default function ScreenThird() {
     if (!cameraRef) return;
     let photo = await cameraRef.takePictureAsync({ quality: 0.8 });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
-      { resize: { width: 800, height: 600 } },
+      { resize: { width: 600, height: 800 } },
     ]);
-    let localUri = resizedPhoto.uri;
-    let filename = localUri.split("/").pop();
-    let match = /\.(\w+)$/.exec(filename);
-    let type = match ? `image/${match[1]}` : `image`;
-    let formData = new FormData();
-    formData.append("image_files", { uri: localUri, type, name: filename });
 
-    dispatch(setImageFrontal(localUri));
+    dispatch(setImageFrontal(resizedPhoto.uri));
     navigation.navigate("screen-4");
-
-    try {
-      const response = await photoApi.postImageApi(session, formData, filename);
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(setStatistics(data.items));
-      }
-      if (!response.ok) {
-        console.log(response);
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
   };
 
   if (!permission) {
