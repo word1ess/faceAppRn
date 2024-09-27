@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { photoApi } from "../api/api";
 
 const initialState = {
-  frontal: "",
-  profile: "",
+  frontal: {
+    toUser: "",
+    toServer: "",
+  },
+  profile: {
+    toUser: "",
+    toServer: "",
+  },
 };
 
 export const imageSlice = createSlice({
@@ -11,10 +16,18 @@ export const imageSlice = createSlice({
   initialState,
   reducers: {
     setImageFrontal: (state, action) => {
-      state.frontal = action.payload;
+      const [toUserFrontal, toServerFrontal] = action.payload;
+      state.frontal = {
+        toUser: toUserFrontal,
+        toServer: toServerFrontal,
+      };
     },
     setImageProfile: (state, action) => {
-      state.profile = action.payload;
+      const [toUserProfile, toServerProfile] = action.payload;
+      state.profile = {
+        toUser: toUserProfile,
+        toServer: toServerProfile,
+      };
     },
   },
 });

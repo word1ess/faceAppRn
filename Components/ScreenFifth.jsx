@@ -1,6 +1,7 @@
 import CustomText from "./Сommon/CustomText.jsx";
 import CustomBtn from "./Сommon/CustomBtn.jsx";
 import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
+import * as FileSystem from "expo-file-system";
 
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -13,16 +14,23 @@ export default function ScreenFifth() {
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const convertImageToBase64 = async (uri) => {
+    const base64 = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    return base64;
+  };
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.6,
     });
     if (!result.canceled) {
-      dispatch(setImageProfile(result.assets[0].uri));
+      const base64 = await convertImageToBase64(result.assets[0].uri);
+      dispatch(setImageProfile([result.assets[0].uri, base64]));
       navigation.navigate("tabs");
     }
   };

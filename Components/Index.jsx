@@ -1,17 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-
 import CustomText from "./Сommon/CustomText.jsx";
 import CustomBtn from "./Сommon/CustomBtn.jsx";
-
 import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
-import { setUserSession } from "../redux/statistics.js";
-import { useDispatch } from "react-redux";
-import Svg, { Path } from "react-native-svg";
-
 import * as Linking from "expo-linking";
 
+import { View, Text, StyleSheet } from "react-native";
+import { setUserSession, setUserRefferalls } from "../redux/statistics.js";
+import { useDispatch } from "react-redux";
+import Svg, { Path } from "react-native-svg";
+import { useEffect } from "react";
+import { userApi } from "../api/api.js";
+
 export default function Index() {
+  const dispatch = useDispatch();
   let url = Linking.useURL();
 
   let regex = /[?&]([^=#]+)=([^&#]*)/g,
@@ -20,8 +21,33 @@ export default function Index() {
   while ((match = regex.exec(url))) {
     params[match[1]] = match[2];
   }
-  const dispatch = useDispatch();
-  dispatch(setUserSession(params.session));
+
+  const getUserReferalls = async () => {
+    try {
+      // const response = await userApi.getUserRefferallCountApi(params.session);
+      const response = await userApi.getUserRefferallCountApi();
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(setUserRefferalls(data.count));
+      } else {
+        // Обработка ошибки 422
+        const responseErrorr = response.json();
+        console.error(
+          "Ошибка 422:",
+          response.status,
+          response.json(responseErrorr.detail[1])
+        );
+      }
+    } catch (error) {
+      console.error("Error get refferalls:", error);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(setUserSession(params.session));
+    getUserReferalls(params.session);
+  }, []);
 
   return (
     <View

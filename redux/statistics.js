@@ -46,6 +46,7 @@ const initialState = {
     },
   ],
   userSession: "ahpbPzrKjf7NWBZ0ZV2eBlcW6d0QXbxIIJ+2GZW2/4U=",
+  userRefferals: 0,
   overallRating: 70,
 };
 
@@ -72,15 +73,20 @@ export const statisticsSlice = createSlice({
         }
       });
       state.overallRating = `${Math.round(calcOverallRating(state.items))}`;
-    },
 
+      console.log(state);
+    },
     setUserSession: (state, action) => {
       state.userSession = action.payload;
+    },
+    setUserRefferalls: (state, action) => {
+      state.userRefferals = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setStatistics, setUserSession } = statisticsSlice.actions;
+export const { setStatistics, setUserSession, setUserRefferalls } =
+  statisticsSlice.actions;
 
 export default statisticsSlice.reducer;

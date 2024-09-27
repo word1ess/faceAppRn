@@ -1,12 +1,11 @@
 import CustomText from "./Сommon/CustomText.jsx";
 import CustomBtn from "./Сommon/CustomBtn.jsx";
 import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
-import { View, Image } from "react-native";
+import { View } from "react-native";
 import { useSelector } from "react-redux";
 export default function ScreenFourth() {
-  const imageFrontal = useSelector((state) => state.image.frontal);
+  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
-  const statisticsAll = useSelector((state) => state.statistics.items);
 
   return (
     <View

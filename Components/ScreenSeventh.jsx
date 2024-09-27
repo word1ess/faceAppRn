@@ -10,38 +10,62 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 export default function ScreenSeventh() {
-  const imageFrontal = useSelector((state) => state.image.frontal);
-  const imageProfile = useSelector((state) => state.image.profile);
-  const session = useSelector((state) => state.statistics.session);
-  const imageSource = imageFrontal ? { uri: imageFrontal } : "";
-  const statisticsAll = useSelector((state) => state.statistics.items);
   const dispatch = useDispatch();
 
+  const imageFrontalToUser = useSelector((state) => state.image.frontal.toUser);
+  const imageFrontalToServer = useSelector(
+    (state) => state.image.frontal.toServer
+  );
+  const imageProfileToServer = useSelector(
+    (state) => state.image.profile.toServer
+  );
+  const session = useSelector((state) => state.statistics.session);
+  const statisticsAll = useSelector((state) => state.statistics.items);
+  const refferallsCount = useSelector(
+    (state) => state.statistics.userRefferals
+  );
+
+  const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
+
   const getStatisticks = async () => {
-    const images = [imageFrontal, imageProfile];
-    const formData = new FormData();
-    const fileNames = [];
-    images.forEach((img) => {
-      let filename = img.split("/").pop();
+    const imagesToServer = [imageFrontalToServer, imageProfileToServer];
+    const images = [];
+
+    for (const image of imagesToServer) {
+      let filename = image.split("/").pop();
       let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
-      fileNames.push(filename);
-      formData.append("image_files", { uri: img, type, name: filename });
-    });
+      let extension = match ? match[1] : "jpg"; // Определение расширения файла
+
+      if (image === undefined) {
+        console.log("Нет изображения!");
+        return;
+      }
+      images.push({
+        image,
+        extension,
+      });
+    }
     try {
-      const response = await photoApi.postImageApi(
-        session,
-        formData,
-        fileNames
-      );
+      const response = await photoApi.postImageApi(session, images);
+
       if (response.ok) {
         const data = await response.json();
+        console.log(data.items);
         dispatch(setStatistics(data.items));
+      } else {
+        // Обработка ошибки 422
+        const responseErrorr = response.json();
+        console.error(
+          "Ошибка 422:",
+          response.status,
+          response.json(responseErrorr.detail[1])
+        );
       }
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error uploading images:", error);
     }
   };
+
   useEffect(() => {
     getStatisticks();
   }, []);
@@ -108,6 +132,8 @@ export default function ScreenSeventh() {
             </Pressable>
           </LinearGradient>
         </View>
+
+        <CustomText text={refferallsCount} fontSize={14} />
       </View>
     </View>
   );

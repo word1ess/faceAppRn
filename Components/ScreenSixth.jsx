@@ -1,4 +1,5 @@
 import CustomText from "./Сommon/CustomText.jsx";
+import * as FileSystem from "expo-file-system";
 
 import {
   Pressable,
@@ -22,7 +23,12 @@ export default function ScreenSixth() {
   const dispatch = useDispatch();
   const colorsGradient = ["#c78fff", "#3d73eb"];
   let cameraRef;
-
+  const convertImageToBase64 = async (uri) => {
+    const base64 = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    return base64;
+  };
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
 
@@ -30,7 +36,9 @@ export default function ScreenSixth() {
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
       { resize: { width: 600, height: 800 } },
     ]);
-    dispatch(setImageProfile(resizedPhoto.uri));
+    const base64 = await convertImageToBase64(resizedPhoto.uri);
+
+    dispatch(setImageProfile([resizedPhoto.uri, base64]));
     navigation.navigate("tabs");
   };
 

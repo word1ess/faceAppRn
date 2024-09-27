@@ -3,27 +3,38 @@ import fetch from "node-fetch";
 export const photoApi = {
   async postImageApi(
     session = "ahpbPzrKjf7NWBZ0ZV2eBlcW6d0QXbxIIJ+2GZW2/4U=",
-    formData,
-    filename
+    images
   ) {
-    const response = await fetch("https://miniandroid.top:8080/rate_image/", {
-      method: "POST",
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${session}`,
-        Accept: "*/*",
-        "Access-Control-Allow-Origin":
-          "https://miniandroid.top:8080/rate_image/",
-        "Access-Control-Allow-Methods":
-          "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-        "Access-Control-Allow-Headers":
-          "origin,X-Requested-With,content-type,accept",
-        "Access-Control-Allow-Credentials": "true",
-        "Content-Disposition": `form-data; name="image_files"; filename="${filename}"`,
-      },
-    });
+    const response = await fetch(
+      "https://miniandroid.top:8080/rate_image/base64/",
+      {
+        method: "POST",
+        body: JSON.stringify({ images }),
+        headers: {
+          Authorization: `Bearer ${session}`,
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    console.log("Ответ сервера:", response); // Логируем ответ
+    return response;
+  },
+};
+export const userApi = {
+  async getUserRefferallCountApi(
+    session = "ahpbPzrKjf7NWBZ0ZV2eBlcW6d0QXbxIIJ+2GZW2/4U="
+  ) {
+    const response = await fetch(
+      "https://miniandroid.top:8080/referral_use/count",
+      {
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${session}`,
+          accept: "application/json",
+        },
+      }
+    );
 
     return response;
   },

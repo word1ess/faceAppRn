@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
 
 export default function ScreenEighth() {
-  const imageFrontal = useSelector((state) => state.image.frontal);
+  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const statisticsAll = useSelector((state) => state.statistics.info);

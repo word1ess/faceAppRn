@@ -1,12 +1,12 @@
 import CustomText from "./Сommon/CustomText.jsx";
 import * as ImagePicker from "expo-image-picker";
-import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
 import * as FileSystem from "expo-file-system";
+import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
 
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View, Pressable, Text } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setImageFrontal } from "../redux/image.js";
 import { useCameraPermissions } from "expo-camera";
 
@@ -14,18 +14,26 @@ export default function ScreenSecond() {
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const session = useSelector((state) => state.statistics.userSession);
 
   const [permission, requestPermission] = useCameraPermissions();
 
+  const convertImageToBase64 = async (uri) => {
+    const base64 = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    return base64;
+  };
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.5,
+      quality: 0.6,
     });
     if (!result.canceled) {
+      const base64 = await convertImageToBase64(result.assets[0].uri);
+      dispatch(setImageFrontal([result.assets[0].uri, base64]));
+      navigation.navigate("screen-4");
       // let localUri = result.assets[0].uri;
       // let filename = localUri.split("/").pop();
       // let match = /\.(\w+)$/.exec(filename);
@@ -33,9 +41,6 @@ export default function ScreenSecond() {
 
       // const formData = new FormData();
       // formData.append("image_files", { uri: localUri, type, name: filename });
-
-      dispatch(setImageFrontal(result.assets[0].uri));
-      navigation.navigate("screen-4");
 
       // try {
       //   const response = await photoApi.postImageApi(
@@ -128,10 +133,3 @@ const styles = StyleSheet.create({
     color: "#9f8fff",
   },
 });
-// Функция для преобразования URI в Base64
-// const convertImageToBase64 = async (uri) => {
-//   const base64Data = await FileSystem.readAsStringAsync(uri, {
-//     encoding: FileSystem.EncodingType.Base64,
-//   });
-//   return base64Data;
-// };
