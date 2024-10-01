@@ -22,7 +22,7 @@ export default function Index() {
   let session = "lRkdP0CKCytXWW9NJcWo0kxqrg6q5lWOJ90XV0c3mW8=";
   if (Platform.OS === "web") {
     const searchParams = new URLSearchParams(window.location.search);
-    session = searchParams.get("session");
+    session = searchParams.get("user");
   }
 
   const getUserReferalls = async () => {
@@ -90,6 +90,7 @@ export default function Index() {
         <Text style={styles.headerText}>Logo</Text>
       </View>
       <Text>
+        <CustomText text={searchParams && searchParams} />{" "}
         <CustomText text={session ? session : "Сессия не пришла"} />{" "}
         <CustomText text={"Сделайте селфи для анализа"} />{" "}
         <CustomText text={"и получите готовый результат"} color="#9f8fff" />

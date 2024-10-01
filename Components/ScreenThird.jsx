@@ -31,11 +31,11 @@ export default function ScreenThird() {
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
     let photo = await cameraRef.takePictureAsync({
-      quality: 0.6,
+      quality: 1,
       base64: true,
     });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
-      { resize: { width: 200, height: 200 } },
+      { resize: { width: 200, height: 400 } },
     ]);
     let base64 = checkCorrectBase(photo.base64);
     dispatch(setImageFrontal([resizedPhoto.uri, base64]));

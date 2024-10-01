@@ -16,6 +16,7 @@ import Svg, { Path } from "react-native-svg";
 
 import * as ImageManipulator from "expo-image-manipulator";
 import checkCorrectBase from "../commonFn/checkCorrectBase.js";
+import { setImageProfile } from "../redux/image.js";
 
 export default function ScreenSixth() {
   const [facing, setFacing] = useState("front");
@@ -24,18 +25,19 @@ export default function ScreenSixth() {
   const dispatch = useDispatch();
   const colorsGradient = ["#c78fff", "#3d73eb"];
   let cameraRef;
+
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
     let photo = await cameraRef.takePictureAsync({
-      quality: 0.6,
+      quality: 1,
       base64: true,
     });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
-      { resize: { width: 200, height: 200 } },
+      { resize: { width: 200, height: 400 } },
     ]);
     let base64 = checkCorrectBase(photo.base64);
-    dispatch(setImageFrontal([resizedPhoto.uri, base64]));
-    navigation.navigate("screen-4");
+    dispatch(setImageProfile([resizedPhoto.uri, base64]));
+    navigation.navigate("screen-7");
   };
 
   if (!permission) {
@@ -79,7 +81,7 @@ export default function ScreenSixth() {
       <View style={styles.takePhotoStyle}>
         <Pressable
           onPress={() => {
-            navigation.navigate("screen-2");
+            navigation.navigate("screen-5");
           }}
           style={styles.btnBackStyle}
         >
