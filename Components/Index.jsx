@@ -14,12 +14,16 @@ import { useDispatch, useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
 import { useEffect } from "react";
 import { userApi } from "../api/api.js";
+import { Platform } from "react-native";
 
 export default function Index() {
   const dispatch = useDispatch();
-  let url = Linking.useURL();
 
-  const session = url.split("?session=")[1];
+  let session = "lRkdP0CKCytXWW9NJcWo0kxqrg6q5lWOJ90XV0c3mW8=";
+  if (Platform.OS === "web") {
+    const searchParams = new URLSearchParams(window.location.search);
+    session = searchParams.get("session");
+  }
 
   const getUserReferalls = async () => {
     try {
@@ -86,6 +90,7 @@ export default function Index() {
         <Text style={styles.headerText}>Logo</Text>
       </View>
       <Text>
+        <CustomText text={session ? session : "Сессия не пришла"} />{" "}
         <CustomText text={"Сделайте селфи для анализа"} />{" "}
         <CustomText text={"и получите готовый результат"} color="#9f8fff" />
       </Text>

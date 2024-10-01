@@ -14,7 +14,9 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setImageFrontal } from "../redux/image.js";
+
 import * as ImageManipulator from "expo-image-manipulator";
+import checkCorrectBase from "../commonFn/checkCorrectBase.js";
 
 export default function ScreenThird() {
   const [facing, setFacing] = useState("back");
@@ -29,13 +31,14 @@ export default function ScreenThird() {
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
     let photo = await cameraRef.takePictureAsync({
-      quality: 0.8,
+      quality: 0.6,
       base64: true,
     });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
-      { resize: { width: 600, height: 800 } },
+      { resize: { width: 200, height: 200 } },
     ]);
-    dispatch(setImageFrontal([resizedPhoto.uri, photo.base64]));
+    let base64 = checkCorrectBase(photo.base64);
+    dispatch(setImageFrontal([resizedPhoto.uri, base64]));
     navigation.navigate("screen-4");
   };
 

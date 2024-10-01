@@ -7,6 +7,7 @@ export default function ScreenFourth() {
   const imageFrontal = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
 
+  console.log(imageFrontal.length);
   return (
     <View
       style={{

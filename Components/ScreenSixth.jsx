@@ -11,10 +11,11 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import Svg, { Path } from "react-native-svg";
 import { useDispatch } from "react-redux";
-import { setImageProfile } from "../redux/image.js";
+import Svg, { Path } from "react-native-svg";
+
 import * as ImageManipulator from "expo-image-manipulator";
+import checkCorrectBase from "../commonFn/checkCorrectBase.js";
 
 export default function ScreenSixth() {
   const [facing, setFacing] = useState("front");
@@ -25,17 +26,16 @@ export default function ScreenSixth() {
   let cameraRef;
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
-
     let photo = await cameraRef.takePictureAsync({
-      quality: 0.8,
+      quality: 0.6,
       base64: true,
     });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
-      { resize: { width: 600, height: 800 } },
+      { resize: { width: 200, height: 200 } },
     ]);
-
-    dispatch(setImageProfile([resizedPhoto.uri, photo.base64]));
-    navigation.navigate("tabs");
+    let base64 = checkCorrectBase(photo.base64);
+    dispatch(setImageFrontal([resizedPhoto.uri, base64]));
+    navigation.navigate("screen-4");
   };
 
   if (!permission) {
