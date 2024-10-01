@@ -5,8 +5,12 @@ import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
 import * as Linking from "expo-linking";
 
 import { View, Text, StyleSheet } from "react-native";
-import { setUserSession, setUserRefferalls } from "../redux/statistics.js";
-import { useDispatch } from "react-redux";
+import {
+  setUserSession,
+  setUserRefferalls,
+  setUserRefferallLink,
+} from "../redux/statistics.js";
+import { useDispatch, useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
 import { useEffect } from "react";
 import { userApi } from "../api/api.js";
@@ -15,18 +19,11 @@ export default function Index() {
   const dispatch = useDispatch();
   let url = Linking.useURL();
 
-  let regex = /[?&]([^=#]+)=([^&#]*)/g,
-    params = {},
-    match;
-  while ((match = regex.exec(url))) {
-    params[match[1]] = match[2];
-  }
+  const session = url.split("?session=")[1];
 
   const getUserReferalls = async () => {
     try {
-      // const response = await userApi.getUserRefferallCountApi(params.session);
-      const response = await userApi.getUserRefferallCountApi();
-
+      const response = await userApi.getUserRefferallCountApi(session);
       if (response.ok) {
         const data = await response.json();
         dispatch(setUserRefferalls(data.count));
@@ -43,10 +40,30 @@ export default function Index() {
       console.error("Error get refferalls:", error);
     }
   };
+  const getUserReferallLink = async () => {
+    try {
+      const response = await userApi.getUserRefferallLinkApi(session);
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(setUserRefferallLink(data.link));
+      } else {
+        // Обработка ошибки 422
+        const responseErrorr = response.json();
+        console.error(
+          "Ошибка 422:",
+          response.status,
+          response.json(responseErrorr.detail[1])
+        );
+      }
+    } catch (error) {
+      console.error("Error get refferalls:", error);
+    }
+  };
 
   useEffect(() => {
-    dispatch(setUserSession(params.session));
-    getUserReferalls(params.session);
+    dispatch(setUserSession(session));
+    getUserReferalls();
+    getUserReferallLink();
   }, []);
 
   return (

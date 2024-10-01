@@ -4,9 +4,18 @@ import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, Text, StyleSheet, Pressable } from "react-native";
 import { useSelector } from "react-redux";
-import Svg, { Path } from "react-native-svg";
 
 export default function ScreenNinth() {
+  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
+  const imageSource = imageFrontal ? { uri: imageFrontal } : "";
+  const rating = useSelector((state) => state.statistics.overallRating);
+  const navigation = useNavigation();
+  const btnClickHandle = () => {
+    navigation.navigate("screen-2");
+  };
+
+  const colorsGradient = ["#c78fff", "#3d73eb"];
+
   const styles = StyleSheet.create({
     imageContainer: {
       position: "absolute",
@@ -105,7 +114,7 @@ export default function ScreenNinth() {
       height: 45,
       position: "absolute",
       bottom: -4,
-      // left: `${rating}%`,
+      left: `${rating}%`,
     },
     tabThumb: {
       display: "flex",
@@ -127,15 +136,7 @@ export default function ScreenNinth() {
       textAlign: "center",
     },
   });
-  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
-  const imageSource = imageFrontal ? { uri: imageFrontal } : "";
-  const rating = useSelector((state) => state.statistics.overallRating);
-  const navigation = useNavigation();
-  const btnClickHandle = () => {
-    navigation.navigate("screen-2");
-  };
 
-  const colorsGradient = ["#c78fff", "#3d73eb"];
   return (
     <View
       style={{

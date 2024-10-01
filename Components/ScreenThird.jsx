@@ -1,6 +1,4 @@
 import CustomText from "./Сommon/CustomText.jsx";
-
-import * as FileSystem from "expo-file-system";
 import {
   Pressable,
   StyleSheet,
@@ -28,21 +26,16 @@ export default function ScreenThird() {
 
   let cameraRef;
 
-  const convertImageToBase64 = async (uri) => {
-    const base64 = await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-    return base64;
-  };
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
-    let photo = await cameraRef.takePictureAsync({ quality: 0.8 });
+    let photo = await cameraRef.takePictureAsync({
+      quality: 0.8,
+      base64: true,
+    });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
       { resize: { width: 600, height: 800 } },
     ]);
-    const base64 = await convertImageToBase64(resizedPhoto.uri);
-
-    dispatch(setImageFrontal([resizedPhoto.uri, base64]));
+    dispatch(setImageFrontal([resizedPhoto.uri, photo.base64]));
     navigation.navigate("screen-4");
   };
 

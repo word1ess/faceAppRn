@@ -16,7 +16,7 @@ export default function CustomBtn({
   if (btnType === "bordered") {
     return (
       <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
-        <Pressable onPress={btnClickHandle}>
+        <Pressable onPress={href && btnClickHandle}>
           <View style={styles.btnBorderStyle}>
             <Text style={styles.textBtnBorderedStyle}>{text}</Text>
           </View>
@@ -26,7 +26,7 @@ export default function CustomBtn({
   }
   return (
     <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
-      <Pressable onPress={btnClickHandle}>
+      <Pressable onPress={href && btnClickHandle}>
         <Text style={styles.btnText}>{text}</Text>
       </Pressable>
     </LinearGradient>

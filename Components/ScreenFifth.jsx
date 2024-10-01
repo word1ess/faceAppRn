@@ -14,12 +14,6 @@ export default function ScreenFifth() {
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const convertImageToBase64 = async (uri) => {
-    const base64 = await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-    return base64;
-  };
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -27,10 +21,12 @@ export default function ScreenFifth() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.6,
+      base64: true,
     });
     if (!result.canceled) {
-      const base64 = await convertImageToBase64(result.assets[0].uri);
-      dispatch(setImageProfile([result.assets[0].uri, base64]));
+      dispatch(
+        setImageProfile([result.assets[0].uri, result.assets[0].base64])
+      );
       navigation.navigate("tabs");
     }
   };

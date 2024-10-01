@@ -1,13 +1,15 @@
 import CircularProgress from "react-native-circular-progress-indicator";
 import CustomText from "./Сommon/CustomText.jsx";
+import CustomBtn from "./Сommon/CustomBtn.jsx";
 
 import { photoApi } from "../api/api.js";
-import { setStatistics } from "../redux/statistics.js";
+import { setStatistics, setUserRefferalls } from "../redux/statistics.js";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, Text, StyleSheet, Pressable } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { BlurView } from "expo-blur";
 
 export default function ScreenSeventh() {
   const dispatch = useDispatch();
@@ -23,6 +25,9 @@ export default function ScreenSeventh() {
   const statisticsAll = useSelector((state) => state.statistics.items);
   const refferallsCount = useSelector(
     (state) => state.statistics.userRefferals
+  );
+  const refferallLink = useSelector(
+    (state) => state.statistics.userRefferalLink
   );
 
   const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
@@ -45,12 +50,12 @@ export default function ScreenSeventh() {
         extension,
       });
     }
+
     try {
       const response = await photoApi.postImageApi(session, images);
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.items);
         dispatch(setStatistics(data.items));
       } else {
         // Обработка ошибки 422
@@ -62,10 +67,13 @@ export default function ScreenSeventh() {
         );
       }
     } catch (error) {
-      console.error("Error uploading images:", error);
+      // console.error("Error uploading images:", error);
     }
   };
-
+  const btnHandleInvite = () => {
+    console.log("click");
+    dispatch(setUserRefferalls(4));
+  };
   useEffect(() => {
     getStatisticks();
   }, []);
@@ -83,6 +91,7 @@ export default function ScreenSeventh() {
   const btnClickHandle = () => {
     navigation.navigate("screen-7");
   };
+
   return (
     <View
       style={{
@@ -114,6 +123,27 @@ export default function ScreenSeventh() {
               </View>
             );
           })}
+
+          {refferallsCount < 3 && (
+            <BlurView
+              intensity={100}
+              tint="dark"
+              style={styles.contentStatisticsShadow}
+            >
+              <CustomText
+                text={"Для разблокировки пригласите больше рефералов!"}
+              />
+              <CustomText text={`${refferallsCount}/3`} />
+              <LinearGradient
+                colors={colorsGradient}
+                style={styles.btnGradient}
+              >
+                <Pressable onPress={btnHandleInvite}>
+                  <Text style={styles.btnText}>Пригласить</Text>
+                </Pressable>
+              </LinearGradient>
+            </BlurView>
+          )}
         </View>
         <View style={styles.btns}>
           <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
@@ -127,13 +157,20 @@ export default function ScreenSeventh() {
           >
             <Pressable>
               <View style={styles.btnBorderStyle}>
-                <Text style={styles.textBtnBorderedStyle}>Поделиться</Text>
+                <Text
+                  style={styles.textBtnBorderedStyle}
+                  onPress={() =>
+                    Linking.openURL(
+                      `https://t.me/share/url?url=${refferallLink}&text=Скорее_Заходи!`
+                    )
+                  }
+                >
+                  Поделиться
+                </Text>
               </View>
             </Pressable>
           </LinearGradient>
         </View>
-
-        <CustomText text={refferallsCount} fontSize={14} />
       </View>
     </View>
   );
@@ -181,6 +218,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     rowGap: 20,
+    position: "relative",
+  },
+  contentStatisticsShadow: {
+    position: "absolute",
+    bottom: 0,
+    left: -20,
+    width: "113%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.97)",
+    padding: 20,
+    height: 280,
+    overflow: "hidden",
+    borderRadius: 20,
+    elevation: 10,
   },
   contentStatisticsItem: {
     display: "flex",
