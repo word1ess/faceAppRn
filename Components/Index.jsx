@@ -23,6 +23,7 @@ export default function Index() {
   if (Platform.OS === "web") {
     const searcUrl = window.location.search;
     const searchParams = new URLSearchParams(searcUrl);
+
     session = searchParams.get("user").toString();
   }
 
