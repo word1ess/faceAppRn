@@ -67,7 +67,7 @@ export default function ScreenSeventh() {
         );
       }
     } catch (error) {
-      // console.error("Error uploading images:", error);
+      console.error("Error uploading images:", error);
     }
   };
   const btnHandleInvite = () => {

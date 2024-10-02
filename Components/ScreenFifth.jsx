@@ -1,7 +1,7 @@
 import CustomText from "./Сommon/CustomText.jsx";
 import CustomBtn from "./Сommon/CustomBtn.jsx";
 import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
-import * as FileSystem from "expo-file-system";
+import checkCorrectBase from "../commonFn/checkCorrectBase.js";
 
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,7 +15,6 @@ export default function ScreenFifth() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -24,13 +23,11 @@ export default function ScreenFifth() {
       base64: true,
     });
     if (!result.canceled) {
-      dispatch(
-        setImageProfile([result.assets[0].uri, result.assets[0].base64])
-      );
+      let base64 = checkCorrectBase(result.assets[0].base64);
+      dispatch(setImageProfile([result.assets[0].uri, base64]));
       navigation.navigate("tabs");
     }
   };
-
   return (
     <View
       style={{
@@ -43,7 +40,7 @@ export default function ScreenFifth() {
     >
       <CustomText text={"Сделайте селфи в профиль"} />
       <CustomImgContainer source={require("../assets/img/face.png")} radius />
-      <CustomBtn text="Сделать селфи" href="screen-6" />
+      {/* <CustomBtn text="Сделать селфи" href="screen-6" />
       <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
         <Pressable onPress={pickImage}>
           <View style={styles.btnBorderStyle}>
@@ -51,6 +48,12 @@ export default function ScreenFifth() {
               Загрузить из галлереи
             </Text>
           </View>
+        </Pressable>
+      </LinearGradient> */}
+
+      <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
+        <Pressable onPress={pickImage}>
+          <Text style={styles.btnText}>Загрузить из галлереи</Text>
         </Pressable>
       </LinearGradient>
     </View>
