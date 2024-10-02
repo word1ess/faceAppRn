@@ -135,14 +135,14 @@ export default function ScreenSeventh() {
                 text={"Для разблокировки пригласите больше рефералов!"}
               />
               <CustomText text={`${refferallsCount}/3`} />
-              <Pressable onPress={btnHandleInvite}>
-                <LinearGradient
-                  colors={colorsGradient}
-                  style={styles.btnGradient}
-                >
+              <LinearGradient
+                colors={colorsGradient}
+                style={styles.btnGradient}
+              >
+                <Pressable onPress={btnHandleInvite}>
                   <Text style={styles.btnText}>Пригласить</Text>
-                </LinearGradient>
-              </Pressable>
+                </Pressable>
+              </LinearGradient>
             </BlurView>
           )}
         </View>
