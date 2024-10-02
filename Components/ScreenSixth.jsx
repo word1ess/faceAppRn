@@ -29,11 +29,11 @@ export default function ScreenSixth() {
   const takePhotoHandle = async () => {
     if (!cameraRef) return;
     let photo = await cameraRef.takePictureAsync({
-      quality: 0.8,
+      quality: 0,
       base64: true,
     });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
-      { resize: { width: 200, height: 350 } },
+      { resize: { width: 900, height: 1200 } },
     ]);
     let base64 = checkCorrectBase(photo.base64);
     dispatch(setImageProfile([resizedPhoto.uri, base64]));
