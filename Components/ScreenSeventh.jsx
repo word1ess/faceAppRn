@@ -1,15 +1,15 @@
 import CircularProgress from "react-native-circular-progress-indicator";
 import CustomText from "./Сommon/CustomText.jsx";
-import CustomBtn from "./Сommon/CustomBtn.jsx";
 
 import { photoApi } from "../api/api.js";
-import { setStatistics, setUserRefferalls } from "../redux/statistics.js";
+import { setStatistics } from "../redux/statistics.js";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, Text, StyleSheet, Pressable } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { BlurView } from "expo-blur";
+import { Linking } from "react-native";
 
 export default function ScreenSeventh() {
   const dispatch = useDispatch();
@@ -135,14 +135,14 @@ export default function ScreenSeventh() {
                 text={"Для разблокировки пригласите больше рефералов!"}
               />
               <CustomText text={`${refferallsCount}/3`} />
-              <LinearGradient
-                colors={colorsGradient}
-                style={styles.btnGradient}
-              >
-                <Pressable onPress={btnHandleInvite}>
+              <Pressable onPress={btnHandleInvite}>
+                <LinearGradient
+                  colors={colorsGradient}
+                  style={styles.btnGradient}
+                >
                   <Text style={styles.btnText}>Пригласить</Text>
-                </Pressable>
-              </LinearGradient>
+                </LinearGradient>
+              </Pressable>
             </BlurView>
           )}
         </View>
