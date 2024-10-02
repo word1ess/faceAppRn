@@ -71,8 +71,9 @@ export default function ScreenSeventh() {
     }
   };
   const btnHandleInvite = () => {
-    console.log("click");
-    dispatch(setUserRefferalls(4));
+    Linking.openURL(
+      `https://t.me/share/url?url=${refferallLink}&text=Скорее_Заходи!`
+    );
   };
   useEffect(() => {
     getStatisticks();
@@ -157,16 +158,7 @@ export default function ScreenSeventh() {
           >
             <Pressable>
               <View style={styles.btnBorderStyle}>
-                <Text
-                  style={styles.textBtnBorderedStyle}
-                  onPress={() =>
-                    Linking.openURL(
-                      `https://t.me/share/url?url=${refferallLink}&text=Скорее_Заходи!`
-                    )
-                  }
-                >
-                  Поделиться
-                </Text>
+                <Text style={styles.textBtnBorderedStyle}>Поделиться</Text>
               </View>
             </Pressable>
           </LinearGradient>
