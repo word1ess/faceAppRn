@@ -30,7 +30,7 @@ export default function ScreenSeventh() {
     (state) => state.statistics.userRefferalLink
   );
 
-  const imageSource = imageFrontalToServer ? { uri: imageFrontalToServer } : "";
+  const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
 
   const getStatisticks = async () => {
     const imagesToServer = [imageFrontalToServer, imageProfileToServer];

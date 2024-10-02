@@ -37,7 +37,7 @@ export default function ScreenSixth() {
     ]);
     let base64 = checkCorrectBase(photo.base64);
     dispatch(setImageProfile([resizedPhoto.uri, base64]));
-    navigation.navigate("screen-7");
+    navigation.navigate("tabs");
   };
 
   if (!permission) {
@@ -91,7 +91,7 @@ export default function ScreenSixth() {
               fill="#9F8FFF"
             />
           </Svg>
-          <CustomText text="Назад" fontSize={14} />
+          <Text style={styles.btnBackText}>Назад</Text>
         </Pressable>
         <TouchableOpacity onPress={takePhotoHandle} style={styles.btnTakePhoto}>
           <LinearGradient
@@ -117,6 +117,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
     marginTop: 28,
+  },
+  btnBackText: {
+    fontSize: 14,
+    color: "#fff",
   },
   btnBackStyle: {
     display: "flex",

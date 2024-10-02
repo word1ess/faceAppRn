@@ -35,7 +35,7 @@ export default function ScreenThird() {
       base64: true,
     });
     const resizedPhoto = await ImageManipulator.manipulateAsync(photo.uri, [
-      { resize: { width: 200, height: 400 } },
+      { resize: { width: 300, height: 400 } },
     ]);
     let base64 = checkCorrectBase(photo.base64);
     dispatch(setImageFrontal([resizedPhoto.uri, base64]));
