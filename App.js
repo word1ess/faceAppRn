@@ -46,13 +46,13 @@ export default function App() {
       <NavigationContainer>
         <StatusBar hidden />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* <Stack.Screen name="index" component={Index} />
+          <Stack.Screen name="index" component={Index} />
           <Stack.Screen name="screen-2" component={ScreenSecond} />
           <Stack.Screen name="screen-3" component={ScreenThird} />
           <Stack.Screen name="screen-4" component={ScreenFourth} />
           <Stack.Screen name="screen-5" component={ScreenFifth} />
-          <Stack.Screen name="screen-6" component={ScreenSixth} /> */}
-          <Stack.Screen name="tabs" component={MyDrawer} />
+          <Stack.Screen name="screen-6" component={ScreenSixth} />
+          <Stack.Screen name="tabs" component={UserAnalisys} />
           <Stack.Screen
             name="CustomTextComponent"
             component={CustomTextComponent}
@@ -99,7 +99,7 @@ function TabsInfo() {
     </Tab.Navigator>
   );
 }
-function MyDrawer() {
+function UserAnalisys() {
   return (
     <Drawer.Navigator
       screenOptions={{
