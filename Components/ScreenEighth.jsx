@@ -2,7 +2,14 @@ import CustomText from "./Сommon/CustomText.jsx";
 
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
 
@@ -142,11 +149,13 @@ export default function ScreenEighth() {
       ],
     },
   ];
-
+  const isLoading = useSelector((state) => state.statistics.isLoading);
   const navigation = useNavigation();
+
   const btnClickHandle = () => {
     navigation.navigate("screen-8");
   };
+
   return (
     <View
       style={{
@@ -175,7 +184,11 @@ export default function ScreenEighth() {
                   {svgForItems[i]?.path}
                 </Svg>
                 <CustomText text={statistic.name} fontSize={18} />
-                <CustomText text={statistic.description} fontSize={12} />
+                {isLoading ? (
+                  <ActivityIndicator size="large" color="#fff" />
+                ) : (
+                  <CustomText text={statistic.description} fontSize={12} />
+                )}
               </View>
             );
           })}

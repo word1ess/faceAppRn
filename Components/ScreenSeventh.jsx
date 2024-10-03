@@ -2,10 +2,17 @@ import CircularProgress from "react-native-circular-progress-indicator";
 import CustomText from "./Сommon/CustomText.jsx";
 
 import { photoApi } from "../api/api.js";
-import { setStatistics } from "../redux/statistics.js";
+import { setLoadingEnd, setStatistics } from "../redux/statistics.js";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { BlurView } from "expo-blur";
@@ -29,7 +36,7 @@ export default function ScreenSeventh() {
   const refferallLink = useSelector(
     (state) => state.statistics.userRefferalLink
   );
-
+  const isLoading = useSelector((state) => state.statistics.isLoading);
   const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
 
   const getStatisticks = async () => {
@@ -45,10 +52,7 @@ export default function ScreenSeventh() {
         console.log("Нет изображения!");
         return;
       }
-      images.push({
-        image,
-        extension,
-      });
+      images.push({ image, extension });
     }
 
     try {
@@ -57,6 +61,7 @@ export default function ScreenSeventh() {
       if (response.ok) {
         const data = await response.json();
         dispatch(setStatistics(data.items));
+        dispatch(setLoadingEnd());
       } else {
         // Обработка ошибки 422
         const responseErrorr = response.json();
@@ -109,18 +114,23 @@ export default function ScreenSeventh() {
             <Image source={imageSource} style={styles.image} />
           </LinearGradient>
         </View>
+
         <View style={styles.contentStatisticsRow}>
           {statisticsAll.map((statistic, i) => {
             return (
               <View key={i} style={styles.contentStatisticsItem}>
                 <CustomText text={statistic.name} fontSize={14} />
-                <CircularProgress
-                  radius={44}
-                  value={statistic.score}
-                  progressValueColor={"#fff"}
-                  activeStrokeColor={colors[i]}
-                  duration={1000}
-                />
+                {isLoading ? (
+                  <ActivityIndicator size="large" color="#fff" />
+                ) : (
+                  <CircularProgress
+                    radius={44}
+                    value={statistic.score}
+                    progressValueColor={"#fff"}
+                    activeStrokeColor={colors[i]}
+                    duration={1000}
+                  />
+                )}
               </View>
             );
           })}
@@ -235,6 +245,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "50%",
     gap: 20,
+    minHeight: 120,
   },
   btns: {
     display: "flex",

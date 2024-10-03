@@ -2,7 +2,14 @@ import CustomText from "./Сommon/CustomText.jsx";
 
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { useSelector } from "react-redux";
 
 export default function ScreenNinth() {
@@ -10,6 +17,7 @@ export default function ScreenNinth() {
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
   const rating = useSelector((state) => state.statistics.overallRating);
   const navigation = useNavigation();
+  const isLoading = useSelector((state) => state.statistics.isLoading);
   const btnClickHandle = () => {
     navigation.navigate("screen-2");
   };
@@ -160,23 +168,39 @@ export default function ScreenNinth() {
             fontWeightStyle={300}
             text="Общий рейтинг"
           />
-          <CustomText text={rating} fontSize={96} />
+
+          {isLoading ? (
+            <ActivityIndicator
+              size="large"
+              color="#fff"
+              style={{
+                display: "flex",
+                margin: "auto",
+              }}
+            />
+          ) : (
+            <CustomText text={rating} fontSize={96} />
+          )}
           <LinearGradient style={styles.tabBar} colors={colorsGradient}>
-            <View style={styles.tabText}>
-              <CustomText text="Вы здесь" fontSize={10} />
-              <View style={styles.tabThumb}>
-                <LinearGradient
-                  style={styles.tabThumbGradient}
-                  colors={colorsGradient}
-                ></LinearGradient>
+            {!isLoading && (
+              <View style={styles.tabText}>
+                <CustomText text="Вы здесь" fontSize={10} />
+                <View style={styles.tabThumb}>
+                  <LinearGradient
+                    style={styles.tabThumbGradient}
+                    colors={colorsGradient}
+                  ></LinearGradient>
+                </View>
               </View>
-            </View>
+            )}
           </LinearGradient>
-          <Text style={styles.contentStatisticsTop}>
-            <CustomText text={"Ваш общий рейтинг лучше чем у "} />
-            <CustomText text={"62% "} color="#9f8fff" />
-            <CustomText text={"людей"} />
-          </Text>
+          {!isLoading && (
+            <Text style={styles.contentStatisticsTop}>
+              <CustomText text={"Ваш общий рейтинг лучше чем у "} />
+              <CustomText text={"62% "} color="#9f8fff" />
+              <CustomText text={"людей"} />
+            </Text>
+          )}
         </View>
         <View style={styles.btns}>
           <LinearGradient colors={colorsGradient} style={styles.btnGradient}>

@@ -49,6 +49,7 @@ const initialState = {
   userRefferals: 0,
   userRefferalLink: 0,
   overallRating: 70,
+  isLoading: true,
 };
 
 function calcOverallRating(arr) {
@@ -84,6 +85,9 @@ export const statisticsSlice = createSlice({
     setUserRefferallLink: (state, action) => {
       state.userRefferalLink = action.payload;
     },
+    setLoadingEnd: (state, action) => {
+      state.isLoading = false;
+    },
   },
 });
 
@@ -93,6 +97,7 @@ export const {
   setUserSession,
   setUserRefferalls,
   setUserRefferallLink,
+  setLoadingEnd,
 } = statisticsSlice.actions;
 
 export default statisticsSlice.reducer;
