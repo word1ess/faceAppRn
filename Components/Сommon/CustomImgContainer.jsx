@@ -5,11 +5,15 @@ export default function CustomImgContainer({
   source,
   bordered = false,
   radius = false,
+  width = "100%",
+  height = "auto",
+  flex = true,
 }) {
   const styles = StyleSheet.create({
     imageContainer: {
-      flex: 1,
-      width: "100%",
+      flex: flex ? 1 : 0,
+      width,
+      height,
       margin: "20px 0px 28px",
       marginTop: 20,
       marginBottom: 20,

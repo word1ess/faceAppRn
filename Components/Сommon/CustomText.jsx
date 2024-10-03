@@ -8,6 +8,7 @@ export default function CustomText({
   color = "#fff",
   textAlign = "center",
   marginBottom = 0,
+  width = "100%",
 }) {
   // switch (fontWeightStyle) {
   //   case 300:
@@ -27,7 +28,7 @@ export default function CustomText({
       textAlign,
       color,
       marginBottom,
-      width: "100%",
+      width,
       textTransform: fontUpperCase ? "uppercase" : "none",
     },
   });
