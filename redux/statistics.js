@@ -86,8 +86,8 @@ export const statisticsSlice = createSlice({
     setUserRefferallLink: (state, action) => {
       state.userRefferalLink = action.payload;
     },
-    setLoadingEnd: (state, action) => {
-      state.isLoading = false;
+    setLoadingStatus: (state, action) => {
+      state.isLoading = action.payload;
     },
   },
 });
@@ -98,7 +98,7 @@ export const {
   setUserSession,
   setUserRefferalls,
   setUserRefferallLink,
-  setLoadingEnd,
+  setLoadingStatus,
 } = statisticsSlice.actions;
 
 export default statisticsSlice.reducer;

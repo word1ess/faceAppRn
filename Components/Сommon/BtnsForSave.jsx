@@ -8,7 +8,7 @@ import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
 export default function BtnsForSave({ isLoading }) {
   const colorsGradient = ["#c78fff", "#3d73eb"];
-  const [screenshotUri, setScreenshotUri] = useState(null);
+  // const [screenshotUri, setScreenshotUri] = useState(null);
   const handleShareScreenshot = async () => {
     // try {
     //   const uri = await MediaLibrary.createAssetAsync(
@@ -45,7 +45,7 @@ export default function BtnsForSave({ isLoading }) {
     <Text style={styles.btnText}>Сохранить</Text>
   </Pressable>
 </LinearGradient> */}
-      {isLoading && (
+      {!isLoading && (
         <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
           <Pressable onPress={handleShareScreenshot}>
             <View style={styles.btnBorderStyle}>

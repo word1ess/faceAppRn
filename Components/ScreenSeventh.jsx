@@ -4,7 +4,7 @@ import BtnsForSave from "./Сommon/BtnsForSave.jsx";
 import UserAnalisys from "./Сommon/UserAnalisys.jsx";
 
 import { photoApi } from "../api/api.js";
-import { setLoadingEnd, setStatistics } from "../redux/statistics.js";
+import { setLoadingStatus, setStatistics } from "../redux/statistics.js";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
@@ -35,13 +35,12 @@ export default function ScreenSeventh() {
   );
   const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
 
-  const getStatisticks = async () => {
-    const imagesToServer = [
-      useSelector((state) => state.image.frontal.toServer),
-      useSelector((state) => state.image.profile.toServer),
-    ];
-    const images = [];
+  const imageFrontal = useSelector((state) => state.image.frontal.toServer);
+  const imageProfile = useSelector((state) => state.image.profile.toServer);
 
+  const getStatisticks = async () => {
+    const imagesToServer = [imageFrontal, imageProfile];
+    const images = [];
     for (const image of imagesToServer) {
       let filename = image.split("/").pop();
       let match = /\.(\w+)$/.exec(filename);
@@ -56,11 +55,11 @@ export default function ScreenSeventh() {
 
     try {
       const response = await photoApi.postImageApi(session, images);
-
+      dispatch(setLoadingStatus(true));
       if (response.ok) {
         const data = await response.json();
         dispatch(setStatistics(data.items));
-        dispatch(setLoadingEnd());
+        dispatch(setLoadingStatus(false));
       } else {
         // Обработка ошибки 422
         const responseErrorr = response.json();
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "rgba(0, 0, 0, 0.97)",
     padding: 20,
-    height: 400,
+    height: 380,
     overflow: "hidden",
     borderRadius: 20,
     elevation: 10,
