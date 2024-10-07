@@ -1,6 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { View, StyleSheet, Image } from "react-native";
-export default function UserAnalisys({ imageSource, colorsGradient }) {
+export default function UserAnalisysImage({ imageSource, colorsGradient }) {
   return (
     <View style={styles.imageContainer}>
       <LinearGradient colors={colorsGradient} style={styles.imageBorder}>

@@ -37,6 +37,14 @@ export default function Practice() {
           <Pressable style={styles.btnWhite}>
             <CustomText text="Посмотреть" width="fit-content" fontSize={16} />
           </Pressable>
+          <CustomText
+            text="Скоро!"
+            marginBottom={-10}
+            marginTop={10}
+            marginLeft={20}
+            fontSize={14}
+            textAlign="left"
+          />
         </View>
         <View style={styles.imageContainer}>
           <Image source={imageSource} style={styles.image} />

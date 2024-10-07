@@ -1,7 +1,8 @@
 import CircularProgress from "react-native-circular-progress-indicator";
 import CustomText from "./Сommon/CustomText.jsx";
 import BtnsForSave from "./Сommon/BtnsForSave.jsx";
-import UserAnalisys from "./Сommon/UserAnalisys.jsx";
+
+import UserAnalisysImage from "./Сommon/UserAnalisys.jsx";
 
 import { photoApi } from "../api/api.js";
 import { setLoadingStatus, setStatistics } from "../redux/statistics.js";
@@ -15,7 +16,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { BlurView } from "expo-blur";
 import { Linking } from "react-native";
 
@@ -38,6 +39,8 @@ export default function ScreenSeventh() {
   const imageFrontal = useSelector((state) => state.image.frontal.toServer);
   const imageProfile = useSelector((state) => state.image.profile.toServer);
 
+  const screenContentRef = useRef(null);
+
   const getStatisticks = async () => {
     const imagesToServer = [imageFrontal, imageProfile];
     const images = [];
@@ -53,25 +56,25 @@ export default function ScreenSeventh() {
       images.push({ image, extension });
     }
 
-    try {
-      const response = await photoApi.postImageApi(session, images);
-      dispatch(setLoadingStatus(true));
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(setStatistics(data.items));
-        dispatch(setLoadingStatus(false));
-      } else {
-        // Обработка ошибки 422
-        const responseErrorr = response.json();
-        console.error(
-          "Ошибка 422:",
-          response.status,
-          response.json(responseErrorr.detail[1])
-        );
-      }
-    } catch (error) {
-      console.error("Error uploading images:", error);
-    }
+    // try {
+    //   const response = await photoApi.postImageApi(session, images);
+    //   dispatch(setLoadingStatus(true));
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     dispatch(setStatistics(data.items));
+    //     dispatch(setLoadingStatus(false));
+    //   } else {
+    //     // Обработка ошибки 422
+    //     const responseErrorr = response.json();
+    //     console.error(
+    //       "Ошибка 422:",
+    //       response.status,
+    //       response.json(responseErrorr.detail[1])
+    //     );
+    //   }
+    // } catch (error) {
+    //   console.error("Error uploading images:", error);
+    // }
   };
   const btnHandleInvite = () => {
     Linking.openURL(
@@ -102,16 +105,15 @@ export default function ScreenSeventh() {
       }}
     >
       <View style={styles.contentStatistics}>
-        <UserAnalisys
+        <UserAnalisysImage
           imageSource={imageSource}
           colorsGradient={colorsGradient}
         />
-        <View style={styles.imageContainer}>
-          <LinearGradient colors={colorsGradient} style={styles.imageBorder}>
-            <Image source={imageSource} style={styles.image} />
-          </LinearGradient>
-        </View>
-        <View style={styles.contentStatisticsRow}>
+        <View
+          style={styles.contentStatisticsRow}
+          ref={screenContentRef}
+          collapsable={false}
+        >
           {statisticsAll.map((statistic, i) => {
             return (
               <View key={i} style={styles.contentStatisticsItem}>
@@ -152,7 +154,10 @@ export default function ScreenSeventh() {
             </BlurView>
           )}
         </View>
-        <BtnsForSave isLoading={isLoading} />
+        <BtnsForSave
+          isLoading={isLoading}
+          screenContentRef={screenContentRef}
+        />
       </View>
     </View>
   );

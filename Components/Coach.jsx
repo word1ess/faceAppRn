@@ -2,14 +2,175 @@ import { useState } from "react";
 import { Path, Svg } from "react-native-svg";
 import { View, Image, Text, StyleSheet, Pressable } from "react-native";
 import CustomText from "./Сommon/CustomText.jsx";
+import { useNavigation } from "@react-navigation/native";
+
 export default function Coach() {
+  const navigation = useNavigation();
   const [coachItems, setCoachItems] = useState([
     { title: "Спроси меня, что угодно!", link: "#" },
-    { title: "Общее улучшение", link: "#" },
-    { title: "Как накачать мышцы", link: "#" },
-    { title: "Как Похудеть", link: "#" },
-    { title: "Как ухаживать за кожей", link: "#" },
+    {
+      title: "Общее улучшение",
+      link: "#",
+      text: [
+        <CustomText
+          text="Общее улучшение здоровья и привлекательности:"
+          fontSize={20}
+          marginBottom={16}
+          color="#D6A731"
+        />,
+        <CustomText
+          text="Питание: Сбалансированный рацион с овощами, фруктами и белками улучшает состояние кожи и волос"
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Физическая активность: Регулярные тренировки улучшают тонус мышц и состояние кожи."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Уход за кожей и волосами: Очищение и увлажнение кожи, регулярный уход за волосами — основа привлекательности."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Сон: 7-8 часов сна восстанавливают организм и улучшают внешний вид."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Управление стрессом: Медитация и йога помогают справляться со стрессом, влияющим на здоровье и внешний вид."
+          textAlign="left"
+          fontSize={14}
+        />,
+      ],
+    },
+    {
+      title: "Как накачать мышцы",
+      link: "#",
+      text: [
+        <CustomText
+          text="Как накачать мышцы:"
+          fontSize={20}
+          marginBottom={16}
+          color="#D6A731"
+          textAlign="center"
+        />,
+        <CustomText
+          text="Силовые тренировки: Упор на базовые упражнения и прогрессивное увеличение нагрузки."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Питание: Белки, сложные углеводы и полезные жиры — основа для роста мышц."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Восстановление: 7-8 часов сна и дни отдыха важны для восстановления мышц."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Последовательность: Регулярные тренировки и терпение приводят к результатам."
+          textAlign="left"
+          fontSize={14}
+        />,
+      ],
+    },
+    {
+      title: "Как Похудеть",
+      link: "#",
+      text: [
+        <CustomText
+          text="Как похудеть:"
+          fontSize={20}
+          marginBottom={16}
+          color="#D6A731"
+          textAlign="center"
+        />,
+        <CustomText
+          text="Питание: Создайте дефицит калорий, употребляйте цельные продукты."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Физическая активность: Регулярные кардиотренировки и силовые упражнения ускоряют метаболизм."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Контроль порций: Следите за размерами порций и пейте достаточно воды."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Последовательность: Похудение требует времени и терпения, избегайте экстремальных диет."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Сон и стресс: Управляйте стрессом и спите не менее 7-8 часов для снижения уровня кортизола."
+          textAlign="left"
+          fontSize={14}
+        />,
+      ],
+    },
+    {
+      title: "Как ухаживать за кожей",
+      link: "#",
+      text: [
+        <CustomText
+          text="Как ухаживать за кожей:"
+          fontSize={20}
+          marginBottom={16}
+          color="#D6A731"
+          textAlign="center"
+        />,
+        <CustomText
+          text="Питание: Создайте дефицит калорий, употребляйте цельные продукты."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Очищение: Умывайтесь дважды в день мягкими средствами."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Увлажнение: Используйте кремы, подходящие вашему типу кожи."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Защита от солнца: SPF — обязательный элемент ухода."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Питание: Антиоксиданты и витамины поддерживают здоровье кожи."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Отшелушивание: Регулярно удаляйте омертвевшие клетки."
+          textAlign="left"
+          fontSize={14}
+        />,
+        <CustomText
+          text="Уход за глазами: Кремы для области вокруг глаз помогают уменьшить отечность и морщины."
+          textAlign="left"
+          fontSize={14}
+        />,
+      ],
+    },
   ]);
+
+  const handleClickNavigate = (text) => {
+    navigation.navigate("CustomTextComponent", {
+      text,
+    });
+  };
   const svgImages = [
     {
       width: 36,
@@ -103,21 +264,53 @@ export default function Coach() {
         {coachItems.map((coachItem, i) => {
           return (
             <>
-              <Pressable style={styles.planItem}>
-                <Svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={svgImages[i]?.width}
-                  height={svgImages[i]?.height}
+              {i === 0 ? (
+                <>
+                  <Pressable style={styles.planItem}>
+                    <Svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={svgImages[i]?.width}
+                      height={svgImages[i]?.height}
+                    >
+                      {svgImages[i]?.path}
+                    </Svg>
+                    <CustomText
+                      width="fit-content"
+                      text={coachItem.title}
+                      fontSize={14}
+                    />
+                  </Pressable>
+                  <CustomText
+                    text="Скоро"
+                    marginBottom={-10}
+                    marginTop={-10}
+                    marginLeft={20}
+                    fontSize={14}
+                    textAlign="left"
+                  />
+                  <View style={styles.line}></View>
+                </>
+              ) : (
+                <Pressable
+                  style={styles.planItem}
+                  onPress={() => {
+                    handleClickNavigate(coachItem.text);
+                  }}
                 >
-                  {svgImages[i]?.path}
-                </Svg>
-                <CustomText
-                  width="fit-content"
-                  text={coachItem.title}
-                  fontSize={14}
-                />
-              </Pressable>
-              {i === 0 && <View style={styles.line}></View>}
+                  <Svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={svgImages[i]?.width}
+                    height={svgImages[i]?.height}
+                  >
+                    {svgImages[i]?.path}
+                  </Svg>
+                  <CustomText
+                    width="fit-content"
+                    text={coachItem.title}
+                    fontSize={14}
+                  />
+                </Pressable>
+              )}
             </>
           );
         })}
@@ -147,6 +340,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 1,
     backgroundColor: "#2a3d55",
-    marginVertical: 20,
+    marginVertical: 10,
   },
 });

@@ -1,10 +1,22 @@
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CustomText from "./CustomText";
+import { useState } from "react";
 
 export default function CustomTextComponent({ route }) {
   const { text } = route.params;
   const navigation = useNavigation();
+  const [dataText] = useState(text);
+
+  const textItem = ({ item }) => {
+    return item;
+  };
   return (
     <View
       style={{
@@ -24,7 +36,7 @@ export default function CustomTextComponent({ route }) {
         />
         <CustomText text="Назад" width="fit-content" />
       </Pressable>
-      <CustomText text={text} textAlign="justify" />
+      <ScrollView contentContainerStyle={styles.text}>{text}</ScrollView>
     </View>
   );
 }
@@ -41,5 +53,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 10,
+    zIndex: 100,
+  },
+  text: {
+    display: "flex",
+    maxWidth: "100%",
+    gap: 16,
+    top: 60,
+    paddingBottom: 80,
   },
 });

@@ -1,43 +1,38 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useState } from "react";
-
-import * as Sharing from "expo-sharing";
+import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
-import * as FileSystem from "expo-file-system";
-import * as Permissions from "expo-permissions";
-export default function BtnsForSave({ isLoading }) {
+import * as Sharing from "expo-sharing";
+
+export default function BtnsForSave({ isLoading, screenContentRef }) {
   const colorsGradient = ["#c78fff", "#3d73eb"];
-  // const [screenshotUri, setScreenshotUri] = useState(null);
-  const handleShareScreenshot = async () => {
-    // try {
-    //   const uri = await MediaLibrary.createAssetAsync(
-    //     //  Используйте  `expo-screenshot`  для  создания  скриншота
-    //     await FileSystem.readAsStringAsync(
-    //       await MediaLibrary.getAssetInfoAsync(await Expo.takeSnapshotAsync())
-    //         .uri
-    //     )
-    //   );
-    //   setScreenshotUri(uri.uri);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // try {
-    //   //  Проверьте,  поддерживает  ли  устройство  обмен  файлами
-    //   if (await Sharing.isAvailableAsync()) {
-    //     await Sharing.shareAsync(screenshotUri, {
-    //       dialogTitle: "Поделиться скриншотом",
-    //       //  Для  Telegram  используйте  уточнение  `social: 'telegram'`
-    //       //  https://docs.expo.dev/versions/latest/sdk/sharing.html
-    //       social: "telegram",
-    //     });
-    //   } else {
-    //     console.log(error);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+
+  const onSaveImageAsync = async () => {
+    if (status === null) {
+      requestPermission();
+    }
+    try {
+      const localUri = await captureRef(screenContentRef.current);
+      await MediaLibrary.saveToLibraryAsync(localUri);
+
+      shareFile(localUri);
+    } catch (e) {
+      console.log(e);
+    }
   };
+  const shareFile = async (localUri) => {
+    if (await Sharing.isAvailableAsync()) {
+      const shareOptions = {
+        message: "Посмотрите  этот  файл!",
+      };
+      await Sharing.shareAsync(localUri, shareOptions);
+    } else {
+      //  Обмен  файлами  не  доступен
+    }
+  };
+
   return (
     <View style={styles.btns}>
       {/* <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
@@ -45,9 +40,9 @@ export default function BtnsForSave({ isLoading }) {
     <Text style={styles.btnText}>Сохранить</Text>
   </Pressable>
 </LinearGradient> */}
-      {!isLoading && (
+      {isLoading && (
         <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
-          <Pressable onPress={handleShareScreenshot}>
+          <Pressable onPress={onSaveImageAsync}>
             <View style={styles.btnBorderStyle}>
               <Text style={styles.textBtnBorderedStyle}>Поделиться</Text>
             </View>
