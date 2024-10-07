@@ -1,15 +1,8 @@
 import CustomText from "./Сommon/CustomText.jsx";
+import BtnsForSave from "./Сommon/BtnsForSave.jsx";
 
-import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  Pressable,
-  ActivityIndicator,
-} from "react-native";
+import { View, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
 
@@ -150,11 +143,6 @@ export default function ScreenEighth() {
     },
   ];
   const isLoading = useSelector((state) => state.statistics.isLoading);
-  const navigation = useNavigation();
-
-  const btnClickHandle = () => {
-    navigation.navigate("screen-8");
-  };
 
   return (
     <View
@@ -193,23 +181,7 @@ export default function ScreenEighth() {
             );
           })}
         </View>
-        <View style={styles.btns}>
-          <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
-            <Pressable onPress={btnClickHandle}>
-              <Text style={styles.btnText}>Сохранить</Text>
-            </Pressable>
-          </LinearGradient>
-          <LinearGradient
-            colors={colorsGradient}
-            style={styles.btnBorderedStyle}
-          >
-            <Pressable>
-              <View style={styles.btnBorderStyle}>
-                <Text style={styles.textBtnBorderedStyle}>Поделиться</Text>
-              </View>
-            </Pressable>
-          </LinearGradient>
-        </View>
+        <BtnsForSave isLoading={isLoading} />
       </View>
     </View>
   );
@@ -264,39 +236,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "50%",
     gap: 20,
-  },
-  btns: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 20,
-    marginTop: 40,
-  },
-  btnGradient: {
-    width: "46%",
-    borderRadius: 60,
-    gap: 8,
-    padding: 12,
-  },
-  btnText: {
-    fontSize: 12,
-    textAlign: "center",
-    color: "#fff",
-  },
-  btnBorderedStyle: {
-    width: "46%",
-    borderRadius: 60,
-    padding: 2,
-  },
-  btnBorderStyle: {
-    gap: 8,
-    padding: 12,
-    borderRadius: 60,
-    color: "#9f8fff",
-    backgroundColor: "#16202c",
-  },
-  textBtnBorderedStyle: {
-    fontSize: 12,
-    textAlign: "center",
-    color: "#9f8fff",
   },
 });

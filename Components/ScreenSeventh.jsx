@@ -1,9 +1,10 @@
 import CircularProgress from "react-native-circular-progress-indicator";
 import CustomText from "./Сommon/CustomText.jsx";
+import BtnsForSave from "./Сommon/BtnsForSave.jsx";
+import UserAnalisys from "./Сommon/UserAnalisys.jsx";
 
 import { photoApi } from "../api/api.js";
 import { setLoadingEnd, setStatistics } from "../redux/statistics.js";
-import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
@@ -21,26 +22,24 @@ import { Linking } from "react-native";
 export default function ScreenSeventh() {
   const dispatch = useDispatch();
 
-  const imageFrontalToUser = useSelector((state) => state.image.frontal.toUser);
-  const imageFrontalToServer = useSelector(
-    (state) => state.image.frontal.toServer
-  );
-  const imageProfileToServer = useSelector(
-    (state) => state.image.profile.toServer
-  );
   const session = useSelector((state) => state.statistics.session);
   const statisticsAll = useSelector((state) => state.statistics.items);
+  const isLoading = useSelector((state) => state.statistics.isLoading);
+  const imageFrontalToUser = useSelector((state) => state.image.frontal.toUser);
+
   const refferallsCount = useSelector(
     (state) => state.statistics.userRefferals
   );
   const refferallLink = useSelector(
     (state) => state.statistics.userRefferalLink
   );
-  const isLoading = useSelector((state) => state.statistics.isLoading);
   const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
 
   const getStatisticks = async () => {
-    const imagesToServer = [imageFrontalToServer, imageProfileToServer];
+    const imagesToServer = [
+      useSelector((state) => state.image.frontal.toServer),
+      useSelector((state) => state.image.profile.toServer),
+    ];
     const images = [];
 
     for (const image of imagesToServer) {
@@ -93,11 +92,6 @@ export default function ScreenSeventh() {
     "#D6A731",
   ];
   const colorsGradient = ["#c78fff", "#3d73eb"];
-  const navigation = useNavigation();
-  const btnClickHandle = () => {
-    navigation.navigate("screen-7");
-  };
-
   return (
     <View
       style={{
@@ -109,12 +103,15 @@ export default function ScreenSeventh() {
       }}
     >
       <View style={styles.contentStatistics}>
+        <UserAnalisys
+          imageSource={imageSource}
+          colorsGradient={colorsGradient}
+        />
         <View style={styles.imageContainer}>
           <LinearGradient colors={colorsGradient} style={styles.imageBorder}>
             <Image source={imageSource} style={styles.image} />
           </LinearGradient>
         </View>
-
         <View style={styles.contentStatisticsRow}>
           {statisticsAll.map((statistic, i) => {
             return (
@@ -156,47 +153,12 @@ export default function ScreenSeventh() {
             </BlurView>
           )}
         </View>
-        <View style={styles.btns}>
-          <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
-            <Pressable onPress={btnClickHandle}>
-              <Text style={styles.btnText}>Сохранить</Text>
-            </Pressable>
-          </LinearGradient>
-          <LinearGradient
-            colors={colorsGradient}
-            style={styles.btnBorderedStyle}
-          >
-            <Pressable>
-              <View style={styles.btnBorderStyle}>
-                <Text style={styles.textBtnBorderedStyle}>Поделиться</Text>
-              </View>
-            </Pressable>
-          </LinearGradient>
-        </View>
+        <BtnsForSave isLoading={isLoading} />
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  imageContainer: {
-    position: "absolute",
-    top: -40,
-    left: 115,
-    borderRadius: 120,
-    width: 120,
-    height: 120,
-    overflow: "hidden",
-    padding: 8,
-  },
-  imageBorder: {
-    borderRadius: 120,
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    borderRadius: 120,
-  },
   contentStatistics: {
     display: "flex",
     flexDirection: "column",
@@ -224,7 +186,7 @@ const styles = StyleSheet.create({
   },
   contentStatisticsShadow: {
     position: "absolute",
-    bottom: 0,
+    bottom: -100,
     left: -20,
     width: "113%",
     display: "flex",
@@ -233,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "rgba(0, 0, 0, 0.97)",
     padding: 20,
-    height: 280,
+    height: 400,
     overflow: "hidden",
     borderRadius: 20,
     elevation: 10,
@@ -247,12 +209,6 @@ const styles = StyleSheet.create({
     gap: 20,
     minHeight: 120,
   },
-  btns: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 20,
-    marginTop: 40,
-  },
   btnGradient: {
     width: "46%",
     borderRadius: 60,
@@ -264,21 +220,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
   },
-  btnBorderedStyle: {
-    width: "46%",
-    borderRadius: 60,
-    padding: 2,
-  },
   btnBorderStyle: {
     gap: 8,
     padding: 12,
     borderRadius: 60,
     color: "#9f8fff",
     backgroundColor: "#16202c",
-  },
-  textBtnBorderedStyle: {
-    fontSize: 12,
-    textAlign: "center",
-    color: "#9f8fff",
   },
 });

@@ -94,7 +94,7 @@ function TabsInfo() {
       }}
     >
       <Tab.Screen name="Скан" component={Practice} />
-      <Tab.Screen name="Прогресс" component={Progress} />
+      <Tab.Screen name="План" component={Plan} />
       <Tab.Screen name="Коуч" component={Coach} />
     </Tab.Navigator>
   );
@@ -109,11 +109,6 @@ function UserAnalisys() {
       <Drawer.Screen
         name="Статистика"
         component={TabsScore}
-        options={headerDriwer}
-      />
-      <Drawer.Screen
-        name="План улучшений"
-        component={Plan}
         options={headerDriwer}
       />
       <Drawer.Screen

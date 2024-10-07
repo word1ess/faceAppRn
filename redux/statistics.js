@@ -47,7 +47,8 @@ const initialState = {
   ],
   userSession: "ahpbPzrKjf7NWBZ0ZV2eBlcW6d0QXbxIIJ+2GZW2/4U=",
   userRefferals: 0,
-  userRefferalLink: 0,
+  userRefferalLink:
+    "https://t.me/Looksmax_test_bot?start=455aaed3-9e62-4bf7-876d-9e4b455c2d74",
   overallRating: 70,
   isLoading: true,
 };

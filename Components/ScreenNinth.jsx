@@ -1,26 +1,15 @@
 import CustomText from "./Сommon/CustomText.jsx";
+import BtnsForSave from "./Сommon/BtnsForSave.jsx";
 
-import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  Pressable,
-  ActivityIndicator,
-} from "react-native";
+import { View, Image, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
 
 export default function ScreenNinth() {
   const imageFrontal = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
   const rating = useSelector((state) => state.statistics.overallRating);
-  const navigation = useNavigation();
   const isLoading = useSelector((state) => state.statistics.isLoading);
-  const btnClickHandle = () => {
-    navigation.navigate("screen-2");
-  };
 
   const colorsGradient = ["#c78fff", "#3d73eb"];
 
@@ -69,40 +58,6 @@ export default function ScreenNinth() {
       rowGap: 20,
     },
 
-    btns: {
-      display: "flex",
-      flexDirection: "row",
-      gap: 20,
-      marginTop: 40,
-    },
-    btnGradient: {
-      width: "46%",
-      borderRadius: 60,
-      gap: 8,
-      padding: 12,
-    },
-    btnText: {
-      fontSize: 12,
-      textAlign: "center",
-      color: "#fff",
-    },
-    btnBorderedStyle: {
-      width: "46%",
-      borderRadius: 60,
-      padding: 2,
-    },
-    btnBorderStyle: {
-      gap: 8,
-      padding: 12,
-      borderRadius: 60,
-      color: "#9f8fff",
-      backgroundColor: "#16202c",
-    },
-    textBtnBorderedStyle: {
-      fontSize: 12,
-      textAlign: "center",
-      color: "#9f8fff",
-    },
     tabBar: {
       position: "relative",
       width: "100%",
@@ -179,21 +134,23 @@ export default function ScreenNinth() {
               }}
             />
           ) : (
-            <CustomText text={rating} fontSize={96} />
+            <>
+              <CustomText text={rating} fontSize={96} />
+              <LinearGradient style={styles.tabBar} colors={colorsGradient}>
+                {!isLoading && (
+                  <View style={styles.tabText}>
+                    <CustomText text="Вы здесь" fontSize={10} />
+                    <View style={styles.tabThumb}>
+                      <LinearGradient
+                        style={styles.tabThumbGradient}
+                        colors={colorsGradient}
+                      ></LinearGradient>
+                    </View>
+                  </View>
+                )}
+              </LinearGradient>
+            </>
           )}
-          <LinearGradient style={styles.tabBar} colors={colorsGradient}>
-            {!isLoading && (
-              <View style={styles.tabText}>
-                <CustomText text="Вы здесь" fontSize={10} />
-                <View style={styles.tabThumb}>
-                  <LinearGradient
-                    style={styles.tabThumbGradient}
-                    colors={colorsGradient}
-                  ></LinearGradient>
-                </View>
-              </View>
-            )}
-          </LinearGradient>
           {!isLoading && (
             <Text style={styles.contentStatisticsTop}>
               <CustomText text={"Ваш общий рейтинг лучше чем у "} />
@@ -202,23 +159,7 @@ export default function ScreenNinth() {
             </Text>
           )}
         </View>
-        <View style={styles.btns}>
-          <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
-            <Pressable onPress={btnClickHandle}>
-              <Text style={styles.btnText}>Сохранить</Text>
-            </Pressable>
-          </LinearGradient>
-          <LinearGradient
-            colors={colorsGradient}
-            style={styles.btnBorderedStyle}
-          >
-            <Pressable>
-              <View style={styles.btnBorderStyle}>
-                <Text style={styles.textBtnBorderedStyle}>Поделиться</Text>
-              </View>
-            </Pressable>
-          </LinearGradient>
-        </View>
+        <BtnsForSave isLoading={isLoading} />
       </View>
     </View>
   );
