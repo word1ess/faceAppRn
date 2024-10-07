@@ -1,22 +1,11 @@
-import {
-  View,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CustomText from "./CustomText";
-import { useState } from "react";
 
 export default function CustomTextComponent({ route }) {
   const { text } = route.params;
   const navigation = useNavigation();
-  const [dataText] = useState(text);
 
-  const textItem = ({ item }) => {
-    return item;
-  };
   return (
     <View
       style={{
@@ -24,7 +13,7 @@ export default function CustomTextComponent({ route }) {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#16202c",
-        padding: 20,
+        overflow: "hidden",
       }}
     >
       <Pressable onPress={navigation.goBack} style={styles.backBtn}>
@@ -36,7 +25,9 @@ export default function CustomTextComponent({ route }) {
         />
         <CustomText text="Назад" width="fit-content" />
       </Pressable>
-      <ScrollView contentContainerStyle={styles.text}>{text}</ScrollView>
+      <div style={styles.text}>
+        <div style={styles.textRow}>{text}</div>
+      </div>
     </View>
   );
 }
@@ -56,10 +47,17 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   text: {
+    position: "relative",
+    overflowY: "auto",
+    height: "100vh",
+  },
+  textRow: {
     display: "flex",
-    maxWidth: "100%",
+    flexDirection: "column",
     gap: 16,
-    top: 60,
     paddingBottom: 80,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 80,
   },
 });

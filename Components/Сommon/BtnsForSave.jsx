@@ -14,9 +14,13 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
       requestPermission();
     }
     try {
-      const localUri = await captureRef(screenContentRef.current);
-      await MediaLibrary.saveToLibraryAsync(localUri);
-
+      const localUri = await captureRef(screenContentRef.current, {
+        result: "base64",
+        format: "png",
+        quality: 1,
+        width: 240,
+        height: 300,
+      });
       shareFile(localUri);
     } catch (e) {
       console.log(e);
@@ -35,12 +39,12 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
 
   return (
     <View style={styles.btns}>
-      {/* <LinearGradient colors={colorsGradient} style={styles.btnGradient}>
+      {/* <LinearGradient colors={colorsGradient} style=ё{styles.btnGradient}>
   <Pressable onPress={btnClickHandle}>
     <Text style={styles.btnText}>Сохранить</Text>
   </Pressable>
 </LinearGradient> */}
-      {isLoading && (
+      {!isLoading && (
         <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
           <Pressable onPress={onSaveImageAsync}>
             <View style={styles.btnBorderStyle}>
