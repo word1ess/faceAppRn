@@ -96,6 +96,7 @@ export default function Index() {
         <CustomText text={"и получите готовый результат"} color="#9f8fff" />
       </Text>
       <CustomText text={session} color="#9f8fff" fontSize={40} />
+      <CustomText text={searcUrl} color="#9f8fff" fontSize={40} />
       <CustomImgContainer
         source={require("../assets/img/face.png")}
         bordered
