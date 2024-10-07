@@ -56,25 +56,25 @@ export default function ScreenSeventh() {
       images.push({ image, extension });
     }
 
-    // try {
-    //   const response = await photoApi.postImageApi(session, images);
-    //   dispatch(setLoadingStatus(true));
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     dispatch(setStatistics(data.items));
-    //     dispatch(setLoadingStatus(false));
-    //   } else {
-    //     // Обработка ошибки 422
-    //     const responseErrorr = response.json();
-    //     console.error(
-    //       "Ошибка 422:",
-    //       response.status,
-    //       response.json(responseErrorr.detail[1])
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.error("Error uploading images:", error);
-    // }
+    try {
+      const response = await photoApi.postImageApi(session, images);
+      dispatch(setLoadingStatus(true));
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(setStatistics(data.items));
+        dispatch(setLoadingStatus(false));
+      } else {
+        // Обработка ошибки 422
+        const responseErrorr = response.json();
+        console.error(
+          "Ошибка 422:",
+          response.status,
+          response.json(responseErrorr.detail[1])
+        );
+      }
+    } catch (error) {
+      console.error("Error uploading images:", error);
+    }
   };
   const btnHandleInvite = () => {
     Linking.openURL(
