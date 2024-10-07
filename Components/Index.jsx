@@ -24,7 +24,7 @@ export default function Index() {
     const searcUrl = window.location.search;
     const searchParams = new URLSearchParams(searcUrl);
 
-    session = searchParams.get("user").toString();
+    session = searchParams.get("user").toString().replace(/\s/g, "+");
   }
 
   const getUserReferalls = async () => {
@@ -95,8 +95,6 @@ export default function Index() {
         <CustomText text={"Сделайте селфи для анализа"} />{" "}
         <CustomText text={"и получите готовый результат"} color="#9f8fff" />
       </Text>
-      <CustomText text={session} color="#9f8fff" fontSize={40} />
-      <CustomText text={searcUrl} color="#9f8fff" fontSize={40} />
       <CustomImgContainer
         source={require("../assets/img/face.png")}
         bordered
