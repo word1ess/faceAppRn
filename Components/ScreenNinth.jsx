@@ -4,14 +4,16 @@ import BtnsForSave from "./Сommon/BtnsForSave.jsx";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
+import { useRef } from "react";
 
 export default function ScreenNinth() {
   const imageFrontal = useSelector((state) => state.image.frontal.toUser);
-  const imageSource = imageFrontal ? { uri: imageFrontal } : "";
   const rating = useSelector((state) => state.statistics.overallRating);
   const isLoading = useSelector((state) => state.statistics.isLoading);
+  const screenContentRef = useRef(null);
 
   const colorsGradient = ["#c78fff", "#3d73eb"];
+  const imageSource = imageFrontal ? { uri: imageFrontal } : "";
 
   const styles = StyleSheet.create({
     imageContainer: {
@@ -110,7 +112,7 @@ export default function ScreenNinth() {
         padding: 20,
       }}
     >
-      <View style={styles.contentStatistics}>
+      <View style={styles.contentStatistics} ref={screenContentRef}>
         <View style={styles.imageContainer}>
           <LinearGradient colors={colorsGradient} style={styles.imageBorder}>
             <Image source={imageSource} style={styles.image} />
@@ -159,7 +161,10 @@ export default function ScreenNinth() {
             </Text>
           )}
         </View>
-        <BtnsForSave isLoading={isLoading} />
+        <BtnsForSave
+          isLoading={isLoading}
+          screenContentRef={screenContentRef}
+        />
       </View>
     </View>
   );

@@ -23,17 +23,21 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
       });
       shareFile(localUri);
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   };
   const shareFile = async (localUri) => {
     if (await Sharing.isAvailableAsync()) {
-      const shareOptions = {
-        message: "Посмотрите  этот  файл!",
-      };
-      await Sharing.shareAsync(localUri, shareOptions);
+      try {
+        const shareOptions = {
+          message: "Посмотрите этот файл!",
+        };
+        await Sharing.shareAsync(localUri, shareOptions);
+      } catch (e) {
+        alert(e);
+      }
     } else {
-      //  Обмен  файлами  не  доступен
+      alert("Обмен не доступен!");
     }
   };
 

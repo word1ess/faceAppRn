@@ -5,13 +5,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
+import { useRef } from "react";
 
 export default function ScreenEighth() {
   const imageFrontal = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
-  const colorsGradient = ["#c78fff", "#3d73eb"];
   const statisticsAll = useSelector((state) => state.statistics.info);
+  const isLoading = useSelector((state) => state.statistics.isLoading);
+  const screenContentRef = useRef(null);
 
+  const colorsGradient = ["#c78fff", "#3d73eb"];
   const svgForItems = [
     {
       width: 61,
@@ -142,7 +145,6 @@ export default function ScreenEighth() {
       ],
     },
   ];
-  const isLoading = useSelector((state) => state.statistics.isLoading);
 
   return (
     <View
@@ -154,7 +156,7 @@ export default function ScreenEighth() {
         padding: 20,
       }}
     >
-      <View style={styles.contentStatistics}>
+      <View style={styles.contentStatistics} ref={screenContentRef}>
         <View style={styles.imageContainer}>
           <LinearGradient colors={colorsGradient} style={styles.imageBorder}>
             <Image source={imageSource} style={styles.image} />
@@ -181,7 +183,10 @@ export default function ScreenEighth() {
             );
           })}
         </View>
-        <BtnsForSave isLoading={isLoading} />
+        <BtnsForSave
+          isLoading={isLoading}
+          screenContentRef={screenContentRef}
+        />
       </View>
     </View>
   );

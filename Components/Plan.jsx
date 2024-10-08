@@ -38,7 +38,7 @@ export default function Plan() {
                 fontSize={48}
                 color={i === 0 ? "#d6a731" : "#fff"}
               />
-              <View style={styles.planItemInfo}>
+              <View>
                 <CustomText
                   text={planItem.title}
                   fontSize={12}

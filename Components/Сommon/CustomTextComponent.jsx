@@ -26,7 +26,22 @@ export default function CustomTextComponent({ route }) {
         <CustomText text="Назад" width="fit-content" />
       </Pressable>
       <div style={styles.text}>
-        <div style={styles.textRow}>{text}</div>
+        <div style={styles.textRow}>
+          {text.map((textCopmonent) => {
+            return (
+              <CustomText
+                text={textCopmonent.text}
+                fontSize={textCopmonent.fontSize}
+                textAlign={textCopmonent.textAlign}
+                color={textCopmonent.color}
+                fontUpperCase={textCopmonent.fontUpperCase}
+                marginBottom={textCopmonent.marginBottom}
+                marginTop={textCopmonent.marginTop}
+                paddingLeft={textCopmonent.paddingLeft}
+              />
+            );
+          })}
+        </div>
       </div>
     </View>
   );
