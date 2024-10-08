@@ -11,12 +11,12 @@ import * as Sharing from "expo-sharing";
 export default function BtnsForSave({ isLoading, screenContentRef }) {
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const [status, requestPermission] = MediaLibrary.usePermissions();
-  const [permission, requestPermissionForStorage] = useCameraPermissions();
 
+  const requestStoragePermission = async () => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    return status === "granted";
+  };
   const onSaveImageAsync = async () => {
-    if (!Platform.OS === "web") {
-      requestPermissionForStorage();
-    }
     if (status === null) {
       requestPermission();
     }
@@ -34,7 +34,9 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
     }
   };
   const shareFile = async (localUri) => {
-    if (permission && (await Sharing.isAvailableAsync())) {
+    const hasPermission = await requestStoragePermission();
+
+    if (hasPermission && (await Sharing.isAvailableAsync())) {
       try {
         const shareOptions = {
           message: "Посмотрите этот файл!",
@@ -44,7 +46,7 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
         alert(e);
       }
     } else {
-      requestPermissionForStorage();
+      requestStoragePermission();
       alert("Обмен не доступен!");
     }
   };
@@ -56,7 +58,7 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
     <Text style={styles.btnText}>Сохранить</Text>
   </Pressable>
 </LinearGradient> */}
-      {isLoading && (
+      {!isLoading && (
         <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
           <Pressable onPress={onSaveImageAsync}>
             <View style={styles.btnBorderStyle}>
