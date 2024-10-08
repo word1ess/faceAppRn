@@ -1,15 +1,22 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { captureRef } from "react-native-view-shot";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { Platform } from "react-native";
+
 import * as MediaLibrary from "expo-media-library";
 import * as Sharing from "expo-sharing";
 
 export default function BtnsForSave({ isLoading, screenContentRef }) {
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const [status, requestPermission] = MediaLibrary.usePermissions();
+  const [permission, requestPermissionForStorage] = useCameraPermissions();
 
   const onSaveImageAsync = async () => {
+    if (!Platform.OS === "web") {
+      requestPermissionForStorage();
+    }
     if (status === null) {
       requestPermission();
     }
@@ -27,7 +34,7 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
     }
   };
   const shareFile = async (localUri) => {
-    if (await Sharing.isAvailableAsync()) {
+    if (permission && (await Sharing.isAvailableAsync())) {
       try {
         const shareOptions = {
           message: "Посмотрите этот файл!",
@@ -37,6 +44,7 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
         alert(e);
       }
     } else {
+      requestPermissionForStorage();
       alert("Обмен не доступен!");
     }
   };
@@ -48,7 +56,7 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
     <Text style={styles.btnText}>Сохранить</Text>
   </Pressable>
 </LinearGradient> */}
-      {!isLoading && (
+      {isLoading && (
         <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
           <Pressable onPress={onSaveImageAsync}>
             <View style={styles.btnBorderStyle}>
