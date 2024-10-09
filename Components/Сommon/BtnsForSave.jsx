@@ -2,8 +2,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import { captureRef } from "react-native-view-shot";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import { Platform } from "react-native";
 
 import * as MediaLibrary from "expo-media-library";
 import * as Sharing from "expo-sharing";
@@ -17,26 +15,25 @@ export default function BtnsForSave({ isLoading, screenContentRef }) {
     return status === "granted";
   };
   const onSaveImageAsync = async () => {
+    const peremission = await requestStoragePermission();
     if (status === null) {
       requestPermission();
     }
     try {
       const localUri = await captureRef(screenContentRef.current, {
-        result: "base64",
-        format: "png",
+        // result: "base64",
+        // format: "png",
         quality: 1,
-        width: 240,
+        width: 200,
         height: 300,
       });
-      shareFile(localUri);
+      shareFile(localUri, peremission);
     } catch (e) {
       alert(e);
     }
   };
-  const shareFile = async (localUri) => {
-    const hasPermission = await requestStoragePermission();
-
-    if (hasPermission && (await Sharing.isAvailableAsync())) {
+  const shareFile = async (localUri, peremission) => {
+    if (peremission && (await Sharing.isAvailableAsync())) {
       try {
         const shareOptions = {
           message: "Посмотрите этот файл!",

@@ -12,21 +12,22 @@ import {
 } from "../redux/statistics.js";
 import { useDispatch, useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { userApi } from "../api/api.js";
 import { Platform } from "react-native";
+import BtnsForSave from "./Сommon/BtnsForSave.jsx";
 
 export default function Index() {
   const dispatch = useDispatch();
-
+  const screenContentRef = useRef(null);
   let session = "lRkdP0CKCytXWW9NJcWo0kxqrg6q5lWOJ90XV0c3mW8=";
+
   if (Platform.OS === "web") {
     const searcUrl = window.location.search;
     const searchParams = new URLSearchParams(searcUrl);
 
     session = searchParams.get("user").toString().replace(/\s/g, "+");
   }
-
   const getUserReferalls = async () => {
     try {
       const response = await userApi.getUserRefferallCountApi(session);
@@ -81,6 +82,7 @@ export default function Index() {
         backgroundColor: "#16202c",
         padding: 20,
       }}
+      ref={screenContentRef}
     >
       <View style={styles.headerStyle}>
         <Svg xmlns="http://www.w3.org/2000/svg" width={50} height={50}>
@@ -105,9 +107,11 @@ export default function Index() {
         colorsGradient={["#9f8fff", "#3d73eb"]}
         href="screen-2"
       />
+      <BtnsForSave isLoading={false} screenContentRef={screenContentRef} />
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   headerStyle: {
     display: "flex",
