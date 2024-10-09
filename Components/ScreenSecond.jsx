@@ -21,7 +21,7 @@ export default function ScreenSecond() {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.1,
+      quality: 0,
       base64: true,
     });
 
