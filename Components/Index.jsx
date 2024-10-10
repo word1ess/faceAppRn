@@ -107,7 +107,6 @@ export default function Index() {
         colorsGradient={["#9f8fff", "#3d73eb"]}
         href="screen-2"
       />
-      <BtnsForSave isLoading={false} screenContentRef={screenContentRef} />
     </View>
   );
 }

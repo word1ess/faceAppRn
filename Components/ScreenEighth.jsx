@@ -1,18 +1,26 @@
 import CustomText from "./Сommon/CustomText.jsx";
 import BtnsForSave from "./Сommon/BtnsForSave.jsx";
+import shareTextDone from "../commonFn/setTextToShare.js";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
 import Svg, { Path } from "react-native-svg";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ScreenEighth() {
+  const [textShare, setTextShare] = useState(null);
+  const screenContentRef = useRef(null);
+
+  const isLoading = useSelector((state) => state.statistics.isLoading);
+  const statisticsAll = useSelector((state) => state.statistics.info);
+
   const imageFrontal = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
-  const statisticsAll = useSelector((state) => state.statistics.info);
-  const isLoading = useSelector((state) => state.statistics.isLoading);
-  const screenContentRef = useRef(null);
+
+  const refferallLink = useSelector(
+    (state) => state.statistics.userRefferalLink
+  );
 
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const svgForItems = [
@@ -146,6 +154,10 @@ export default function ScreenEighth() {
     },
   ];
 
+  useEffect(() => {
+    shareTextDone(statisticsAll, setTextShare);
+  }, [isLoading]);
+
   return (
     <View
       style={{
@@ -175,9 +187,13 @@ export default function ScreenEighth() {
                 </Svg>
                 <CustomText text={statistic.name} fontSize={18} />
                 {isLoading ? (
-                  <ActivityIndicator size="large" color="#fff" />
+                  <ActivityIndicator key={i} size="large" color="#fff" />
                 ) : (
-                  <CustomText text={statistic.description} fontSize={12} />
+                  <CustomText
+                    key={i}
+                    text={statistic.description}
+                    fontSize={12}
+                  />
                 )}
               </View>
             );
@@ -186,6 +202,9 @@ export default function ScreenEighth() {
         <BtnsForSave
           isLoading={isLoading}
           screenContentRef={screenContentRef}
+          refferallLink={refferallLink}
+          text={textShare}
+          type="face"
         />
       </View>
     </View>

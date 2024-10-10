@@ -4,16 +4,27 @@ import BtnsForSave from "./Сommon/BtnsForSave.jsx";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Image, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ScreenNinth() {
-  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
-  const rating = useSelector((state) => state.statistics.overallRating);
-  const isLoading = useSelector((state) => state.statistics.isLoading);
+  const [textShare, setTextShare] = useState(null);
   const screenContentRef = useRef(null);
 
-  const colorsGradient = ["#c78fff", "#3d73eb"];
+  const rating = useSelector((state) => state.statistics.overallRating);
+  const isLoading = useSelector((state) => state.statistics.isLoading);
+
+  const imageFrontal = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontal ? { uri: imageFrontal } : "";
+
+  const refferallLink = useSelector(
+    (state) => state.statistics.userRefferalLink
+  );
+
+  const colorsGradient = ["#c78fff", "#3d73eb"];
+
+  useEffect(() => {
+    setTextShare(`\n\nМой общий рейтинг внешности в Looksmax: ||${rating}||`);
+  }, [isLoading]);
 
   const styles = StyleSheet.create({
     imageContainer: {
@@ -164,6 +175,8 @@ export default function ScreenNinth() {
         <BtnsForSave
           isLoading={isLoading}
           screenContentRef={screenContentRef}
+          refferallLink={refferallLink}
+          text={textShare}
         />
       </View>
     </View>

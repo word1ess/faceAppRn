@@ -1,7 +1,6 @@
 import CircularProgress from "react-native-circular-progress-indicator";
 import CustomText from "./Сommon/CustomText.jsx";
 import BtnsForSave from "./Сommon/BtnsForSave.jsx";
-
 import UserAnalisysImage from "./Сommon/UserAnalisys.jsx";
 
 import { photoApi } from "../api/api.js";
@@ -9,24 +8,30 @@ import { setLoadingStatus, setStatistics } from "../redux/statistics.js";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
-  Image,
   Text,
   StyleSheet,
   Pressable,
   ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BlurView } from "expo-blur";
 import { Linking } from "react-native";
+import shareTextDone from "../commonFn/setTextToShare.js";
 
 export default function ScreenSeventh() {
   const dispatch = useDispatch();
+  const screenContentRef = useRef(null);
+  const [textShare, setTextShare] = useState(null);
 
   const session = useSelector((state) => state.statistics.session);
-  const statisticsAll = useSelector((state) => state.statistics.items);
   const isLoading = useSelector((state) => state.statistics.isLoading);
+  const statisticsAll = useSelector((state) => state.statistics.items);
+
+  const imageFrontal = useSelector((state) => state.image.frontal.toServer);
+  const imageProfile = useSelector((state) => state.image.profile.toServer);
   const imageFrontalToUser = useSelector((state) => state.image.frontal.toUser);
+  const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
 
   const refferallsCount = useSelector(
     (state) => state.statistics.userRefferals
@@ -34,12 +39,6 @@ export default function ScreenSeventh() {
   const refferallLink = useSelector(
     (state) => state.statistics.userRefferalLink
   );
-  const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
-
-  const imageFrontal = useSelector((state) => state.image.frontal.toServer);
-  const imageProfile = useSelector((state) => state.image.profile.toServer);
-
-  const screenContentRef = useRef(null);
 
   const getStatisticks = async () => {
     const imagesToServer = [imageFrontal, imageProfile];
@@ -59,18 +58,13 @@ export default function ScreenSeventh() {
     try {
       const response = await photoApi.postImageApi(session, images);
       dispatch(setLoadingStatus(true));
-      if (response.ok) {
+      if (!response.error) {
         const data = await response.json();
         dispatch(setStatistics(data.items));
         dispatch(setLoadingStatus(false));
       } else {
-        // Обработка ошибки 422
-        const responseErrorr = response.json();
-        console.error(
-          "Ошибка 422:",
-          response.status,
-          response.json(responseErrorr.detail[1])
-        );
+        const responseError = response.json();
+        console.error("Ошибка загрузки:", responseError.error);
       }
     } catch (error) {
       console.error("Error uploading images:", error);
@@ -81,9 +75,14 @@ export default function ScreenSeventh() {
       `https://t.me/share/url?url=${refferallLink}&text=Скорее_Заходи!`
     );
   };
+
   useEffect(() => {
     getStatisticks();
   }, []);
+
+  useEffect(() => {
+    shareTextDone(statisticsAll, setTextShare);
+  }, [isLoading]);
 
   const colors = [
     "#E8846E",
@@ -157,6 +156,8 @@ export default function ScreenSeventh() {
         <BtnsForSave
           isLoading={isLoading}
           screenContentRef={screenContentRef}
+          refferallLink={refferallLink}
+          text={textShare}
         />
       </View>
     </View>

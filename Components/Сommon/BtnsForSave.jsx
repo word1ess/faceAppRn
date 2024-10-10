@@ -1,63 +1,71 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { captureRef } from "react-native-view-shot";
+import { Linking } from "react-native";
 
 import * as MediaLibrary from "expo-media-library";
 import * as Sharing from "expo-sharing";
 
-export default function BtnsForSave({ isLoading, screenContentRef }) {
+export default function BtnsForSave({
+  isLoading,
+  screenContentRef,
+  refferallLink,
+  text,
+}) {
+  // ! Логика для передачи скриншота. Не работает(
+  // const [status, requestPermission] = MediaLibrary.usePermissions();
+  // const requestStoragePermission = async () => {
+  //   const { status } = await MediaLibrary.requestPermissionsAsync();
+  //   return status === "granted";
+  // };
+  // const onSaveImageAsync = async () => {
+  //   const peremission = await requestStoragePermission();
+  //   if (status === null) {
+  //     requestPermission();
+  //   }
+  //   try {
+  //     const localUri = await captureRef(screenContentRef.current, {
+  //       result: "base64",
+  //       format: "png",
+  //       quality: 1,
+  //       width: 200,
+  //       height: 300,
+  //     });
+  //     shareFile(localUri, peremission);
+  //   } catch (e) {
+  //     alert(e);
+  //   }
+  // };
+  // const shareFile = async (localUri, peremission) => {
+  //   if (peremission && (await Sharing.isAvailableAsync())) {
+  //     try {
+  //       const shareOptions = {
+  //         message: "Посмотрите этот файл!",
+  //       };
+  //       await Sharing.shareAsync(localUri, shareOptions);
+  //     } catch (e) {
+  //       alert(e);
+  //     }
+  //   } else {
+  //     requestStoragePermission();
+  //     alert("Обмен не доступен!");
+  //   }
+  // };
+
   const colorsGradient = ["#c78fff", "#3d73eb"];
-  const [status, requestPermission] = MediaLibrary.usePermissions();
-
-  const requestStoragePermission = async () => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
-    return status === "granted";
+  const handleSaveBtn = () => {
+    Linking.openURL(
+      `https://t.me/share/url?url=${refferallLink}&text=${encodeURIComponent(
+        text
+      )}`
+    );
   };
-  const onSaveImageAsync = async () => {
-    const peremission = await requestStoragePermission();
-    if (status === null) {
-      requestPermission();
-    }
-    try {
-      const localUri = await captureRef(screenContentRef.current, {
-        // result: "base64",
-        // format: "png",
-        quality: 1,
-        width: 200,
-        height: 300,
-      });
-      shareFile(localUri, peremission);
-    } catch (e) {
-      alert(e);
-    }
-  };
-  const shareFile = async (localUri, peremission) => {
-    if (peremission && (await Sharing.isAvailableAsync())) {
-      try {
-        const shareOptions = {
-          message: "Посмотрите этот файл!",
-        };
-        await Sharing.shareAsync(localUri, shareOptions);
-      } catch (e) {
-        alert(e);
-      }
-    } else {
-      requestStoragePermission();
-      alert("Обмен не доступен!");
-    }
-  };
-
   return (
     <View style={styles.btns}>
-      {/* <LinearGradient colors={colorsGradient} style=ё{styles.btnGradient}>
-  <Pressable onPress={btnClickHandle}>
-    <Text style={styles.btnText}>Сохранить</Text>
-  </Pressable>
-</LinearGradient> */}
       {!isLoading && (
         <LinearGradient colors={colorsGradient} style={styles.btnBorderedStyle}>
-          <Pressable onPress={onSaveImageAsync}>
+          <Pressable onPress={handleSaveBtn}>
             <View style={styles.btnBorderStyle}>
               <Text style={styles.textBtnBorderedStyle}>Поделиться</Text>
             </View>
