@@ -9,6 +9,7 @@ import { StyleSheet, View, Pressable, Text } from "react-native";
 import { useDispatch } from "react-redux";
 import { setImageFrontal } from "../redux/image.js";
 import { useCameraPermissions } from "expo-camera";
+
 export default function ScreenSecond() {
   const colorsGradient = ["#c78fff", "#3d73eb"];
   const navigation = useNavigation();

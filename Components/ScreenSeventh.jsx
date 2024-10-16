@@ -24,7 +24,7 @@ export default function ScreenSeventh() {
   const screenContentRef = useRef(null);
   const [textShare, setTextShare] = useState(null);
 
-  const session = useSelector((state) => state.statistics.session);
+  const session = useSelector((state) => state.statistics.userSession);
   const isLoading = useSelector((state) => state.statistics.isLoading);
   const statisticsAll = useSelector((state) => state.statistics.items);
 
@@ -39,7 +39,7 @@ export default function ScreenSeventh() {
   const refferallLink = useSelector(
     (state) => state.statistics.userRefferalLink
   );
-  alert(session);
+
   const getStatisticks = async () => {
     const imagesToServer = [imageFrontal, imageProfile];
     const images = [];
