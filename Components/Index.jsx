@@ -2,7 +2,6 @@ import React from "react";
 import CustomText from "./Сommon/CustomText.jsx";
 import CustomBtn from "./Сommon/CustomBtn.jsx";
 import CustomImgContainer from "./Сommon/CustomImgContainer.jsx";
-import * as Linking from "expo-linking";
 
 import { View, Text, StyleSheet } from "react-native";
 import {
@@ -15,18 +14,18 @@ import Svg, { Path } from "react-native-svg";
 import { useEffect, useRef } from "react";
 import { userApi } from "../api/api.js";
 import { Platform } from "react-native";
-import BtnsForSave from "./Сommon/BtnsForSave.jsx";
 
 export default function Index() {
   const dispatch = useDispatch();
   const screenContentRef = useRef(null);
-  let session = "lRkdP0CKCytXWW9NJcWo0kxqrg6q5lWOJ90XV0c3mW8=";
+  let session;
 
   if (Platform.OS === "web") {
     const searcUrl = window.location.search;
     const searchParams = new URLSearchParams(searcUrl);
 
     session = searchParams.get("user").toString().replace(/\s/g, "+");
+    alert(session);
   }
   const getUserReferalls = async () => {
     try {
