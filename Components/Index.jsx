@@ -25,7 +25,7 @@ export default function Index() {
     const searchParams = new URLSearchParams(searcUrl);
 
     session = searchParams.get("user").toString().replace(/\s/g, "+");
-    alert(session);
+    dispatch(setUserSession(session));
   }
   const getUserReferalls = async () => {
     try {
@@ -67,7 +67,6 @@ export default function Index() {
   };
 
   useEffect(() => {
-    dispatch(setUserSession(session));
     getUserReferalls();
     getUserReferallLink();
   }, []);
