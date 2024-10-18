@@ -3,45 +3,45 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   items: [
     {
-      name: "1. Общий рейтинг",
+      name: "Общий рейтинг",
       score: 0,
     },
     {
-      name: "2. Подбородок",
+      name: "Подбородок",
       score: 0,
     },
     {
-      name: "3. Кожа",
+      name: "Кожа",
       score: 0,
     },
     {
-      name: "4. Волосы",
+      name: "Волосы",
       score: 0,
     },
     {
-      name: "5. Глаза",
+      name: "Глаза",
       score: 0,
     },
     {
-      name: "6. Симметрия",
+      name: "Симметрия",
       score: 0,
     },
   ],
   info: [
     {
-      name: "7. Форма лица",
+      name: "Форма лица",
       score: 0,
     },
     {
-      name: "8. Угол глаз",
+      name: "Угол глаз",
       score: 0,
     },
     {
-      name: "9. Форма глаз",
+      name: "Форма глаз",
       score: 0,
     },
     {
-      name: "10. Тип глаз",
+      name: "Тип глаз",
       score: 0,
     },
   ],
@@ -62,14 +62,15 @@ export const statisticsSlice = createSlice({
   reducers: {
     setStatistics: (state, action) => {
       action.payload.forEach((item) => {
-        const index = state.items.findIndex((el) => el.name === item.name);
-
+        const index = state.items.findIndex(
+          (el) => el.name.toLowerCase() === item.name
+        );
         if (index !== -1) {
-          // Обновляем существующий элемент в массиве items
           state.items.splice(index, 1, item);
         } else {
-          // Обновляем существующий элемент в массиве info
-          const infoIndex = state.info.findIndex((el) => el.name === item.name);
+          const infoIndex = state.info.findIndex(
+            (el) => el.name.toLowerCase() === item.name
+          );
           if (infoIndex !== -1) {
             state.info.splice(infoIndex, 1, item);
           }

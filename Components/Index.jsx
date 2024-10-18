@@ -18,8 +18,8 @@ import { Platform } from "react-native";
 export default function Index() {
   const dispatch = useDispatch();
   const screenContentRef = useRef(null);
-  let session;
-
+  let session = "RifuXSjoPHCy47VBT30d7NC/xCYEBbGfAaoP/Fk8VdU=";
+  dispatch(setUserSession(session));
   if (Platform.OS === "web") {
     const searcUrl = window.location.search;
     const searchParams = new URLSearchParams(searcUrl);

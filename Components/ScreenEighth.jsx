@@ -185,7 +185,13 @@ export default function ScreenEighth() {
                 >
                   {svgForItems[i]?.path}
                 </Svg>
-                <CustomText text={statistic.name} fontSize={18} />
+                <CustomText
+                  text={
+                    statistic.name.charAt(0).toUpperCase() +
+                    statistic.name.slice(1)
+                  }
+                  fontSize={18}
+                />
                 {isLoading ? (
                   <ActivityIndicator key={i} size="large" color="#fff" />
                 ) : (

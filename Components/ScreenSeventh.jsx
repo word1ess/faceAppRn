@@ -57,6 +57,8 @@ export default function ScreenSeventh() {
 
     try {
       const response = await photoApi.postImageApi(session, images);
+      console.log(session);
+      console.log(response);
       dispatch(setLoadingStatus(true));
       if (!response.error) {
         const data = await response.json();
@@ -116,7 +118,13 @@ export default function ScreenSeventh() {
           {statisticsAll.map((statistic, i) => {
             return (
               <View key={i} style={styles.contentStatisticsItem}>
-                <CustomText text={statistic.name} fontSize={14} />
+                <CustomText
+                  text={
+                    statistic.name.charAt(0).toUpperCase() +
+                    statistic.name.slice(1)
+                  }
+                  fontSize={14}
+                />
                 {isLoading ? (
                   <ActivityIndicator size="large" color="#fff" />
                 ) : (
