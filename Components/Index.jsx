@@ -89,7 +89,7 @@ export default function Index() {
             fill="#9F8FFF"
           />
         </Svg>
-        <Text style={styles.headerText}>Logo</Text>
+        <Text style={styles.headerText}>LooksMax</Text>
       </View>
       <Text>
         <CustomText text={"Сделайте селфи для анализа"} />{" "}
@@ -125,6 +125,5 @@ const styles = StyleSheet.create({
     fontSize: 48,
     textAlign: "center",
     color: "#fff",
-    textTransform: "uppercase",
   },
 });
