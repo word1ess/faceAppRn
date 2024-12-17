@@ -19,7 +19,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 export default function Index() {
   const dispatch = useDispatch();
   const screenContentRef = useRef(null);
-  let session = "RifuXSjoPHCy47VBT30d7NC/xCYEBbGfAaoP/Fk8VdU=";
+  // let session = "RifuXSjoPHCy47VBT30d7NC/xCYEBbGfAaoP/Fk8VdU=";
+  // dispatch(setUserSession(session));
 
   // Яндекс метрика
   const navigation = useNavigation();
@@ -32,7 +33,6 @@ export default function Index() {
     hit(screenName);
   }, [route.name, hit]);
 
-  dispatch(setUserSession(session));
   if (Platform.OS === "web") {
     const searcUrl = window.location.search;
     const searchParams = new URLSearchParams(searcUrl);
