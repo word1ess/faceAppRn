@@ -14,11 +14,24 @@ import Svg, { Path } from "react-native-svg";
 import { useEffect, useRef } from "react";
 import { userApi } from "../api/api.js";
 import { Platform } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 export default function Index() {
   const dispatch = useDispatch();
   const screenContentRef = useRef(null);
   let session = "RifuXSjoPHCy47VBT30d7NC/xCYEBbGfAaoP/Fk8VdU=";
+
+  // Яндекс метрика
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { hit } = useYandexMetrika(99229823);
+
+  useEffect(() => {
+    // Отправляем 'хит' при переходе на новый экран
+    const screenName = route.name; // Получаем имя текущего экрана
+    hit(screenName);
+  }, [route.name, hit]);
+
   dispatch(setUserSession(session));
   if (Platform.OS === "web") {
     const searcUrl = window.location.search;
