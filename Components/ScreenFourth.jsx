@@ -20,7 +20,7 @@ export default function ScreenFourth() {
     >
       <CustomText text="Фронтальное" />
       <CustomImgContainer source={imageSource} />
-      <CustomBtn text="Далее" href="screen-5" />
+      <CustomBtn text="Далее" href="tabs" />
       <CustomBtn text="Переснять" href="screen-2" btnType="bordered" />
     </View>
   );

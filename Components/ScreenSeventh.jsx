@@ -44,21 +44,19 @@ export default function ScreenSeventh() {
     const imagesToServer = [imageFrontal, imageProfile];
     const images = [];
     for (const image of imagesToServer) {
-      let filename = image.split("/").pop();
-      let match = /\.(\w+)$/.exec(filename);
-      let extension = match ? match[1] : "jpg"; // Определение расширения файла
-
       if (image === undefined) {
         console.log("Нет изображения!");
         return;
       }
+      let filename = image.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let extension = match ? match[1] : "jpg"; // Определение расширения файла
+
       images.push({ image, extension });
     }
 
     try {
       const response = await photoApi.postImageApi(session, images);
-      console.log(session);
-      console.log(response);
       dispatch(setLoadingStatus(true));
       if (!response.error) {
         const data = await response.json();
