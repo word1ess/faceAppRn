@@ -11,6 +11,7 @@ export const photoApi = {
           Authorization: `Bearer ${session}`,
           accept: "application/json",
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
       }
     );

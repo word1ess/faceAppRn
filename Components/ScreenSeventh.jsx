@@ -29,7 +29,7 @@ export default function ScreenSeventh() {
   const statisticsAll = useSelector((state) => state.statistics.items);
 
   const imageFrontal = useSelector((state) => state.image.frontal.toServer);
-  const imageProfile = useSelector((state) => state.image.profile.toServer);
+  // const imageProfile = useSelector((state) => state.image.profile.toServer);
   const imageFrontalToUser = useSelector((state) => state.image.frontal.toUser);
   const imageSource = imageFrontalToUser ? { uri: imageFrontalToUser } : "";
 
@@ -40,20 +40,25 @@ export default function ScreenSeventh() {
     (state) => state.statistics.userRefferalLink
   );
 
-  const getStatisticks = async () => {
-    const imagesToServer = [imageFrontal, imageProfile];
-    const images = [];
-    for (const image of imagesToServer) {
-      if (image === undefined) {
-        console.log("Нет изображения!");
-        return;
-      }
-      let filename = image.split("/").pop();
-      let match = /\.(\w+)$/.exec(filename);
-      let extension = match ? match[1] : "jpg"; // Определение расширения файла
-
-      images.push({ image, extension });
+  function getExtensionFromBase64(base64String) {
+    const mimeTypeMatch = base64String.match(
+      /^data:image\/(png|jpeg|jpg|gif|webp);base64,/
+    );
+    if (mimeTypeMatch) {
+      return mimeTypeMatch[1];
     }
+    return null;
+  }
+
+  const getStatisticks = async () => {
+    const images = [];
+    if (imageFrontalToUser === undefined) {
+      console.log("Нет изображения!");
+      return;
+    }
+    let extension = getExtensionFromBase64(imageFrontalToUser) || "jpg"; // Определение расширения файла
+
+    images.push({ image: imageFrontal, extension });
 
     try {
       const response = await photoApi.postImageApi(session, images);

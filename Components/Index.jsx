@@ -20,7 +20,7 @@ import useYandexMetrika from "../hooks/useYandexMetrika.js";
 export default function Index() {
   const dispatch = useDispatch();
   const screenContentRef = useRef(null);
-  let session = "RifuXSjoPHCy47VBT30d7NC/xCYEBbGfAaoP/Fk8VdU=";
+  // let session = "RifuXSjoPHCy47VBT30d7NC/xCYEBbGfAaoP/Fk8VdU=";
   dispatch(setUserSession(session));
 
   // Яндекс метрика
@@ -34,13 +34,13 @@ export default function Index() {
     hit(screenName);
   }, [route.name, hit]);
 
-  // if (Platform.OS === "web") {
-  //   const searcUrl = window.location.search;
-  //   const searchParams = new URLSearchParams(searcUrl);
+  if (Platform.OS === "web") {
+    const searcUrl = window.location.search;
+    const searchParams = new URLSearchParams(searcUrl);
 
-  //   session = searchParams.get("user").toString().replace(/\s/g, "+");
-  //   dispatch(setUserSession(session));
-  // }
+    session = searchParams.get("user").toString().replace(/\s/g, "+");
+    dispatch(setUserSession(session));
+  }
   const getUserReferalls = async () => {
     try {
       const response = await userApi.getUserRefferallCountApi(session);
